@@ -10,14 +10,14 @@ use yii\web\MethodNotAllowedHttpException;
 
 class AuthController extends Controller
 {
-    public $defaultAction = 'admin-auth';
+    public $defaultAction = 'admin-login';
 
     public function actionAdminLogin()
     {
         $model = new AdminLoginForm();
 
-        if ($this->request->isPost && $model->load(Yii::$app->request->post(), '')) {
-            if ($user_data = $model->login()) {
+        if ($this->request->isPost) {
+            if ($model->load(Yii::$app->request->post(), '') && $user_data = $model->login()) {
                 return $user_data;
             } else {
                 return $model->errors;
