@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\User;
 use yii\data\ActiveDataProvider;
+use yii\web\MethodNotAllowedHttpException;
 
 class WorkerController extends BaseController
 {
@@ -13,7 +14,7 @@ class WorkerController extends BaseController
     {
         $actions = parent::actions();
         $actions['index']['prepareDataProvider'] = [$this, 'setDataProvider'];
-
+        unset($actions['create']);
         return $actions;
     }
 
@@ -24,6 +25,22 @@ class WorkerController extends BaseController
         ]);
 
         return $model;
+    }
+
+    public function actionCreate()
+    {
+        $model = new User();
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post(), '')) {
+                $model->username = strtolower($model->first_name);
+                $model->user_role = User::ROLE_SELLER;
+                $model->setPassword($model->username);
+                $model->generateAuthKey();
+                return $model->save() ? $model : $model->errors;
+            }
+        }
+
+        throw new MethodNotAllowedHttpException("Method not allowed");
     }
 
 }
