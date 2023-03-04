@@ -17,7 +17,11 @@ class AuthController extends Controller
         $model = new AdminLoginForm();
 
         if ($this->request->isPost) {
-            return $this->request->post();
+            if ($model->load(Yii::$app->request->post(), '') && $user_data = $model->login()) {
+                return $user_data;
+            } else {
+                return $model->errors;
+            }
         } else {
             throw new MethodNotAllowedHttpException("Method Not Allowed. This URL can only handle the following request methods: POST.");
         }
