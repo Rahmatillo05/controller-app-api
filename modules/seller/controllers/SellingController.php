@@ -5,11 +5,17 @@ namespace app\modules\seller\controllers;
 use app\controllers\BaseController;
 use app\models\Selling;
 use yii\web\MethodNotAllowedHttpException;
+use yii\web\ServerErrorHttpException;
 
 class SellingController extends BaseController
 {
     public $modelClass = Selling::class;
     public $defaultAction = 'selling';
+
+    /**
+     * @throws ServerErrorHttpException
+     * @throws MethodNotAllowedHttpException
+     */
     public function actionSelling()
     {
         $model = new Selling();
