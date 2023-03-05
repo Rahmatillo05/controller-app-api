@@ -86,18 +86,17 @@ class User extends ActiveRecord implements IdentityInterface
      * findAdminByUsername
      *
      * @param  mixed $username
-     * @return void
+     * @return User|null
      */
     public static function findAdminByUsername($username)
     {
         return self::findOne(['username' => $username, 'user_role' => self::ROLE_ADMIN]);
     }
 
+
     /**
-     * findSellerByUsername
-     *
-     * @param  mixed $username
-     * @return void
+     * @param $username
+     * @return User|null
      */
     public static function findSellerByUsername($username)
     {
