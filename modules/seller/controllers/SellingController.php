@@ -27,4 +27,8 @@ class SellingController extends BaseController
         throw new MethodNotAllowedHttpException();
     }
 
+    public function actionSellingDebt()
+    {
+
+    }
 }
