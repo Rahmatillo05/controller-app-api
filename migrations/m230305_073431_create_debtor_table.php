@@ -20,6 +20,7 @@ class m230305_073431_create_debtor_table extends Migration
             'worker_id' => $this->integer(),
             'created_at' => $this->integer()
         ]);
+        $this->addForeignKey('fk-from-debtor-to-user', 'debtor', 'worker_id', 'user', 'id', 'CASCADE');
     }
 
     /**
@@ -28,5 +29,6 @@ class m230305_073431_create_debtor_table extends Migration
     public function safeDown()
     {
         $this->dropTable('{{%debtor}}');
+        $this->dropForeignKey('fk-from-debtor-to-user', 'debtor');
     }
 }
