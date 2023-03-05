@@ -66,7 +66,8 @@ $config = [
                         'worker',
                         'auth',
                         'category',
-                        'product'
+                        'product',
+                        'other-spent'
                     ],
                     'pluralize' => false
                 ]
