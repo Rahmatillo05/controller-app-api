@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\web\ServerErrorHttpException;
 
 /**
  * This is the model class for table "selling".
@@ -26,6 +27,12 @@ use yii\behaviors\TimestampBehavior;
  */
 class Selling extends \yii\db\ActiveRecord
 {
+    const TYPE_RETAIL = 0; # Optom
+    const TYPE_GOOD = 10; # Chakana
+    const PAY_ONLINE = 0; # Plastikka
+    const PAY_DEBT = 5; # Qarzga
+    const PAY_CASH = 10; # Naqd pulga
+
     /**
      * {@inheritdoc}
      */
@@ -33,6 +40,7 @@ class Selling extends \yii\db\ActiveRecord
     {
         return 'selling';
     }
+
     public function behaviors()
     {
         return [
@@ -108,5 +116,40 @@ class Selling extends \yii\db\ActiveRecord
     public function getWorker()
     {
         return $this->hasOne(User::class, ['id' => 'worker_id']);
+    }
+
+    /**
+     * @throws ServerErrorHttpException
+     */
+    public function soldOnCash(array $products, $type_pay)
+    {
+        $r = [];
+        foreach ($products as $product) {
+            $model = new $this;
+            $model->category_id = $product['category_id'];
+            $model->product_id = $product['product_id'];
+            $model->type_sell = $product['type_sell'];
+            $model->sell_amount = $product['sell_amount'];
+            $model->sell_price = $product['sell_price'];
+            $model->type_pay = $type_pay;
+            if ($this->setProductAmount($model->sell_amount, $model->product_id) && $model->save()) {
+                $r = true;
+            } else {
+                $r = $model->errors;
+            }
+        }
+        return $r;
+    }
+
+    public function setProductAmount($sold_product_amount, $product_id): bool
+    {
+        $product = ProductAmount::findOne(['product_id' => $product_id]);
+        $product->sold_product += $sold_product_amount;
+        if ($product->remaining_product >= $product->sold_product) {
+            return $product->save();
+        } else {
+            throw new ServerErrorHttpException("Sotilayotgan mahsulot hajmi qolgan mahsulotdan ko'p!");
+
+        }
     }
 }

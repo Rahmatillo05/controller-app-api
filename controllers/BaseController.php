@@ -12,6 +12,10 @@ class BaseController extends ActiveController
         'class' => 'yii\rest\Serializer',
         'collectionEnvelope' => 'items',
     ];
+
+    /**
+     * @return array|array[]
+     */
     public function behaviors()
     {
         $behaviors = parent::behaviors();

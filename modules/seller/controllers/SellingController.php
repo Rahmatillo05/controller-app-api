@@ -3,23 +3,20 @@
 namespace app\modules\seller\controllers;
 
 use app\controllers\BaseController;
+use app\models\Selling;
 use yii\web\MethodNotAllowedHttpException;
 
 class SellingController extends BaseController
 {
-
-    public function behaviors()
+    public $modelClass = Selling::class;
+    public $defaultAction = 'selling';
+    public function actionSelling()
     {
-        $actions = parent::actions();
-        unset($actions['index'], $actions['delete'], $actions['view'], $actions['update']);
-
-        return $actions;
-    }
-
-    public function actionSellingOnCash()
-    {
+        $model = new Selling();
         if ($this->request->isPost) {
-            return $this->request->post();
+            $productList = $this->request->post('productList');
+            $type_pay = $this->request->post('type_pay');
+            return $model->soldOnCash($productList, $type_pay);
         }
         throw new MethodNotAllowedHttpException();
     }
