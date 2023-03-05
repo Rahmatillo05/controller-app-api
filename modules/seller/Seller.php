@@ -15,6 +15,7 @@ class Seller extends \yii\base\Module
      * {@inheritdoc}
      */
     public $controllerNamespace = 'app\modules\seller\controllers';
+    public $defaultRoute = 'selling';
 
     /**
      * {@inheritdoc}
