@@ -67,7 +67,8 @@ $config = [
                         'auth',
                         'category',
                         'product',
-                        'other-spent'
+                        'other-spent',
+                        'debtor',
                     ],
                     'pluralize' => false
                 ]

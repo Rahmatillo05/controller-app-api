@@ -55,9 +55,10 @@ class SellerLoginForm extends Model
         }
     }
 
+
     /**
-     * Logs in a user using the provided username and password.
-     * @return bool whether the user is logged in successfully
+     * @return array|false
+     * @throws \yii\base\Exception
      */
     public function login()
     {
