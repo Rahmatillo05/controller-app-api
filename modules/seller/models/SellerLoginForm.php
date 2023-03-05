@@ -68,6 +68,7 @@ class SellerLoginForm extends Model
                 $token->token = Yii::$app->security->generateRandomString(42);
                 $token->user_id = $this->getUser()->id;
                 $token->created_at = time();
+                $token->save();
                 return [
                     'user_data' => $this->getUser(),
                     'token' => $token->token
