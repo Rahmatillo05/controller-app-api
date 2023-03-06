@@ -3,6 +3,7 @@
 namespace app\modules\seller\controllers;
 
 use app\models\Debtor;
+use yii\web\MethodNotAllowedHttpException;
 
 class DebtorController extends \app\controllers\BaseController
 {
@@ -15,5 +16,17 @@ class DebtorController extends \app\controllers\BaseController
         unset($actions['create']);
 
         return $actions;
+    }
+
+    public function actionCreate()
+    {
+        $model = new Debtor();
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post(), '') && $model->addNewDebtor()) {
+                return $model;
+            }
+        } else {
+            throw new MethodNotAllowedHttpException();
+        }
     }
 }
