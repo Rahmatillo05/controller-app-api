@@ -146,7 +146,7 @@ class Selling extends \yii\db\ActiveRecord
         $product = ProductAmount::findOne(['product_id' => $product_id]);
         $product->sold_product += $sold_product_amount;
         if ($product->remaining_product >= $product->sold_product) {
-            $product->remaining_product -= $product->sold_product;
+            $product->remaining_product = $product->has_came_product - $product->sold_product;
             return $product->save();
         } else {
             throw new ServerErrorHttpException("Sotilayotgan mahsulot hajmi qolgan mahsulotdan ko'p!");
