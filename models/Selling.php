@@ -32,6 +32,9 @@ class Selling extends \yii\db\ActiveRecord
     const PAY_ONLINE = 0; # Plastikka
     const PAY_DEBT = 5; # Qarzga
     const PAY_CASH = 10; # Naqd pulga
+    /**
+     * @var mixed|null
+     */
 
     /**
      * {@inheritdoc}
@@ -85,6 +88,38 @@ class Selling extends \yii\db\ActiveRecord
             'type_pay' => 'Type Pay',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+        ];
+    }
+
+    public function fields()
+    {
+        return [
+            'id',
+            'sell_price',
+            'product_id',
+            'sell_amount',
+            'type_sell',
+            'type_pay',
+            'created_at',
+            'worker_id' => function () {
+                return $this->getWorkerData();
+            },
+            'category_id' => function () {
+                return Category::findOne($this->category_id);
+            },
+        ];
+    }
+
+    public function getWorkerData()
+    {
+        $worker = User::findOne($this->worker_id);
+
+        return [
+            'id' => $worker->id,
+            'first_name' => $worker->first_name,
+            'last_name' => $worker->last_name,
+            'phone_number' => $worker->phone_number,
+            'address' => $worker->address
         ];
     }
 
