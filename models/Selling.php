@@ -160,7 +160,7 @@ class Selling extends \yii\db\ActiveRecord
                 $r = $this->save();
                 $selling_id[] = $this->id;
             } else {
-                throw new ServerErrorHttpException("Sotilayotgan mahsulot hajmi qolgan mahsulotdan ko'p!");
+                throw new ServerErrorHttpException("Ma'lumotlarni saqlash xatolik!");
             }
         }
         $debt_history_id = $this->createDebtHistory($debtor_id, $total_debt, $instant_payment);
