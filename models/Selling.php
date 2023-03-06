@@ -159,7 +159,7 @@ class Selling extends \yii\db\ActiveRecord
                 $r = $this->save();
                 $selling_id[] = $this->id;
             } else {
-                throw new ServerErrorHttpException("Ma'lumotlarni saqlash xatolik!");
+                throw new ServerErrorHttpException("Ma'lumotlarni saqlashda xatolik!");
             }
         }
         $debtor_id = $this->createDebtor($debtorData, $total_debt, $instant_payment);
