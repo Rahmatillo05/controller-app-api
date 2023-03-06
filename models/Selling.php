@@ -148,7 +148,6 @@ class Selling extends \yii\db\ActiveRecord
     {
         $r = false;
         $selling_id = [];
-        $debtor_id = $this->createDebtor($debtorData, $total_debt, $instant_payment);
         foreach ($sellingList as $item) {
             $this->category_id = $item['category_id'];
             $this->product_id = $item['product_id'];
@@ -163,6 +162,7 @@ class Selling extends \yii\db\ActiveRecord
                 throw new ServerErrorHttpException("Ma'lumotlarni saqlash xatolik!");
             }
         }
+        $debtor_id = $this->createDebtor($debtorData, $total_debt, $instant_payment);
         $debt_history_id = $this->createDebtHistory($debtor_id, $total_debt, $instant_payment);
         $this->createDebtHistoryList($debt_history_id, $selling_id);
         return $r;
