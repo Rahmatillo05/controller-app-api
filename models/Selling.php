@@ -220,7 +220,7 @@ class Selling extends \yii\db\ActiveRecord
     public function createDebtHistory($debtor, $total_debt, $instant_payment): int
     {
         $debt_history = new DebtHistory();
-        $debt_history->debtor_id = $debtor->id;
+        $debt_history->debtor_id = $debtor;
         $debt_history->debt_amount = $total_debt;
         $debt_history->pay_amount = $instant_payment;
         if ($debt_history->save()) {
