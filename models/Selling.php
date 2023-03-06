@@ -152,4 +152,63 @@ class Selling extends \yii\db\ActiveRecord
             throw new ServerErrorHttpException("Sotilayotgan mahsulot hajmi qolgan mahsulotdan ko'p!");
         }
     }
+
+    /**
+     * @throws ServerErrorHttpException
+     */
+    public function saveWithDebtor($sellingList, $debtorData, $total_debt, $instant_payment)
+    {
+        $r = false;
+        $debtor = new Debtor();
+        $debtor->full_name = $debtorData['full_name'];
+        $debtor->address = $debtorData['address'];
+        $debtor->phone_number = $debtorData['phone_number'];
+        if ($debtor->addNewDebtor($total_debt, $instant_payment)) {
+            $debt_history_id = $this->createDebtHistory($debtor, $total_debt, $instant_payment);
+            foreach ($sellingList as $item) {
+                $this->category_id = $item['category_id'];
+                $this->product_id = $item['product_id'];
+                $this->type_sell = $item['type_sell'];
+                $this->sell_amount = $item['sell_amount'];
+                $this->sell_price = $item['sell_price'];
+                if ($this->setProductAmount($this->sell_amount, $this->product_id)) {
+                    $r = $this->save();
+                    $this->createDebtHistoryList($debt_history_id, $this->id);
+                } else {
+                    throw new ServerErrorHttpException("Sotilayotgan mahsulot hajmi qolgan mahsulotdan ko'p!");
+                }
+            }
+        } else {
+            return $debtor->errors;
+        }
+        return $r;
+    }
+
+    public function saveWithoutDebtor($sellingList, $debtorData, $total_debt, $instant_payment)
+    {
+        $debtor = Debtor::findOne($debtorData['id']);
+        $debt_history = new DebtHistory();
+        $payment_history = PaymentHistory::findOne(['debtor_id' => $debtorData['id']]);
+    }
+
+    public function createDebtHistory($debtor, $total_debt, $instant_payment): int
+    {
+        $debt_history = new DebtHistory();
+        $debt_history->debtor_id = $debtor->id;
+        $debt_history->debt_amount = $total_debt;
+        $debt_history->pay_amount = $instant_payment;
+        if ($debt_history->save()) {
+            return $debt_history->id;
+        } else {
+            throw new ServerErrorHttpException("{$debt_history->errors}");
+        }
+    }
+
+    public function createDebtHistoryList($history_id, $selling_id): bool
+    {
+        $list = new DebtHistoryList();
+        $list->history_id = $history_id;
+        $list->selling_id = $selling_id;
+        return $list->save();
+    }
 }

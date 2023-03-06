@@ -19,6 +19,10 @@ use yii\behaviors\TimestampBehavior;
 class Debtor extends \yii\db\ActiveRecord
 {
     /**
+     * @var mixed|null
+     */
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
