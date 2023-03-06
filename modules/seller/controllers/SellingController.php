@@ -28,6 +28,10 @@ class SellingController extends BaseController
         throw new MethodNotAllowedHttpException();
     }
 
+    /**
+     * @throws MethodNotAllowedHttpException
+     * @throws ServerErrorHttpException
+     */
     public function actionSellingDebt()
     {
         $model = new Selling();
