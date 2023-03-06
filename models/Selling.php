@@ -176,7 +176,7 @@ class Selling extends \yii\db\ActiveRecord
         if ($product->remaining_product < 0) {
             return $product->save();
         } else {
-            throw new ServerErrorHttpException("Sotilayotgan mahsulot hajmi qolgan mahsulotdan ko'p!");
+            throw new ServerErrorHttpException("{$product->remaining_product}");
         }
     }
 
