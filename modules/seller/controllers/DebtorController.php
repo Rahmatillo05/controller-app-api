@@ -10,6 +10,10 @@ class DebtorController extends \app\controllers\BaseController
 
     public function actions()
     {
-        return parent::actions();
+        $actions = parent::actions();
+
+        unset($actions['create']);
+
+        return $actions;
     }
 }
