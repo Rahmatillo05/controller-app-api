@@ -141,22 +141,47 @@ class Selling extends \yii\db\ActiveRecord
         return $r;
     }
 
+    /**
+     * @throws ServerErrorHttpException
+     */
+    public function saveWithDebtor($sellingList, $debtorData, $total_debt, $instant_payment)
+    {
+        $r = false;
+        $selling_id = [];
+        $debtor_id = $this->createDebtor($debtorData, $total_debt, $instant_payment);
+        foreach ($sellingList as $item) {
+            $this->category_id = $item['category_id'];
+            $this->product_id = $item['product_id'];
+            $this->type_sell = $item['type_sell'];
+            $this->sell_amount = $item['sell_amount'];
+            $this->sell_price = $item['sell_price'];
+            $this->type_pay = self::PAY_DEBT;
+            if ($this->setProductAmount($this->sell_amount, $this->product_id)) {
+                $r = $this->save();
+                $selling_id[] = $this->id;
+            } else {
+                throw new ServerErrorHttpException("Sotilayotgan mahsulot hajmi qolgan mahsulotdan ko'p!");
+            }
+        }
+        $debt_history_id = $this->createDebtHistory($debtor_id, $total_debt, $instant_payment);
+        $this->createDebtHistoryList($debt_history_id, $selling_id);
+        return $r;
+    }
+
     public function setProductAmount($sold_product_amount, $product_id): bool
     {
         $product = ProductAmount::findOne(['product_id' => $product_id]);
         $product->sold_product += $sold_product_amount;
         $product->remaining_product = $product->has_came_product - $product->sold_product;
-        if ($product->remaining_product <! 0) {
+        if ($product->remaining_product < !0) {
             return $product->save();
         } else {
             throw new ServerErrorHttpException("Sotilayotgan mahsulot hajmi qolgan mahsulotdan ko'p!");
         }
     }
 
-    /**
-     * @throws ServerErrorHttpException
-     */
-    public function saveWithDebtor($sellingList, $debtorData, $total_debt, $instant_payment)
+
+    /*public function saveWithDebtor($sellingList, $debtorData, $total_debt, $instant_payment)
     {
         $r = false;
         $debtor = new Debtor();
@@ -183,7 +208,7 @@ class Selling extends \yii\db\ActiveRecord
             return $debtor->errors;
         }
         return $r;
-    }
+    }*/
 
     public function saveWithoutDebtor($sellingList, $debtorData, $total_debt, $instant_payment)
     {
@@ -207,9 +232,25 @@ class Selling extends \yii\db\ActiveRecord
 
     public function createDebtHistoryList($history_id, $selling_id): bool
     {
-        $list = new DebtHistoryList();
-        $list->history_id = $history_id;
-        $list->selling_id = $selling_id;
-        return $list->save();
+        $result = false;
+        for ($i = 0; $i < count($selling_id); $i++) {
+            $list = new DebtHistoryList();
+            $list->history_id = $history_id;
+            $list->selling_id = $selling_id[$i];
+            $result = $list->save();
+        }
+        return $result;
+    }
+
+    private function createDebtor($debtorData, $total_debt, $instant_payment)
+    {
+        $debtor = new Debtor();
+        $debtor->full_name = $debtorData['full_name'];
+        $debtor->address = $debtorData['address'];
+        $debtor->phone_number = $debtorData['phone_number'];
+        if ($debtor->addNewDebtor($total_debt, $instant_payment)) {
+            return $debtor->id;
+        }
+        return $debtor->errors;
     }
 }
