@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Product;
 use app\models\ProductAmount;
+use app\models\Selling;
 use yii\web\MethodNotAllowedHttpException;
 use yii\web\NotFoundHttpException;
 
@@ -79,10 +80,11 @@ class ProductController extends BaseController
     {
         $product_data = $this->findModel($id);
         $product_amount = ProductAmount::findOne(['product_id' => $product_data->id]);
-
+        $selling_list = Selling::find()->where(['product_id' => $product_data->id])->orderBy(['id' => SORT_DESC])->all();
         return [
             'product_data' => $product_data,
-            'product_amount' => $product_amount
+            'product_amount' => $product_amount,
+            'selling_list' => $selling_list
         ];
     }
 
