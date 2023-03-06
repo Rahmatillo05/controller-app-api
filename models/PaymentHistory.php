@@ -71,4 +71,12 @@ class PaymentHistory extends \yii\db\ActiveRecord
     {
         return $this->hasMany(PaymentHistoryList::class, ['history_id' => 'id']);
     }
+
+    public function updateDebtAmount($debt_amount, $paid_amount)
+    {
+        $this->debt_amount += $debt_amount;
+        $this->paid_amount += $paid_amount;
+        $this->remaining_amount = $this->debt_amount - $this->paid_amount;
+        return $this->save();
+    }
 }

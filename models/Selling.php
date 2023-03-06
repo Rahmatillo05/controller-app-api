@@ -180,41 +180,30 @@ class Selling extends \yii\db\ActiveRecord
         }
     }
 
-
-    /*public function saveWithDebtor($sellingList, $debtorData, $total_debt, $instant_payment)
-    {
-        $r = false;
-        $debtor = new Debtor();
-        $debtor->full_name = $debtorData['full_name'];
-        $debtor->address = $debtorData['address'];
-        $debtor->phone_number = $debtorData['phone_number'];
-        if ($debtor->addNewDebtor($total_debt, $instant_payment)) {
-            $debt_history_id = $this->createDebtHistory($debtor, $total_debt, $instant_payment);
-            foreach ($sellingList as $item) {
-                $this->category_id = $item['category_id'];
-                $this->product_id = $item['product_id'];
-                $this->type_sell = $item['type_sell'];
-                $this->sell_amount = $item['sell_amount'];
-                $this->sell_price = $item['sell_price'];
-                $this->type_pay = self::PAY_DEBT;
-                if ($this->setProductAmount($this->sell_amount, $this->product_id)) {
-                    $r = $this->save();
-                    $this->createDebtHistoryList($debt_history_id, $this->id);
-                } else {
-                    throw new ServerErrorHttpException("Sotilayotgan mahsulot hajmi qolgan mahsulotdan ko'p!");
-                }
-            }
-        } else {
-            return $debtor->errors;
-        }
-        return $r;
-    }*/
-
     public function saveWithoutDebtor($sellingList, $debtorData, $total_debt, $instant_payment)
     {
+        $r = false;
+        $selling_id = [];
         $debtor = Debtor::findOne($debtorData['id']);
-        $debt_history = new DebtHistory();
         $payment_history = PaymentHistory::findOne(['debtor_id' => $debtorData['id']]);
+        foreach ($sellingList as $item) {
+            $this->category_id = $item['category_id'];
+            $this->product_id = $item['product_id'];
+            $this->type_sell = $item['type_sell'];
+            $this->sell_amount = $item['sell_amount'];
+            $this->sell_price = $item['sell_price'];
+            $this->type_pay = self::PAY_DEBT;
+            if ($this->setProductAmount($this->sell_amount, $this->product_id)) {
+                $r = $this->save();
+                $selling_id[] = $this->id;
+            } else {
+                throw new ServerErrorHttpException("Ma'lumotlarni saqlashda xatolik!");
+            }
+        }
+        $payment_history->updateDebtAmount($total_debt, $instant_payment);
+        $debt_history_id = $this->createDebtHistory($debtor->id, $total_debt, $instant_payment);
+        $this->createDebtHistoryList($debt_history_id, $selling_id);
+        return $r;
     }
 
     public function createDebtHistory($debtor, $total_debt, $instant_payment): int
