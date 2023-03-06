@@ -171,6 +171,7 @@ class Selling extends \yii\db\ActiveRecord
                 $this->type_sell = $item['type_sell'];
                 $this->sell_amount = $item['sell_amount'];
                 $this->sell_price = $item['sell_price'];
+                $this->type_pay = self::PAY_DEBT;
                 if ($this->setProductAmount($this->sell_amount, $this->product_id)) {
                     $r = $this->save();
                     $this->createDebtHistoryList($debt_history_id, $this->id);
