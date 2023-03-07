@@ -52,6 +52,20 @@ class DebtorController extends \app\controllers\BaseController
         ];
     }
 
+    public function actionPaydebt($id)
+    {
+        $model = new PaymentHistoryList();
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post(), '') && $model->save()) {
+                return $model;
+            } else {
+                return $model->errors;
+            }
+        } else {
+            throw new MethodNotAllowedHttpException();
+        }
+    }
+
     private function findModel($id): ?Debtor
     {
         if ($id != null) {
