@@ -44,9 +44,9 @@ class DebtorController extends \app\controllers\BaseController
         $payment_history = PaymentHistory::find()->orderBy(['id' => SORT_DESC])->all();
 
         return [
-            $debtor,
-            $debt_history,
-            $payment_history
+            'debtor' => $debtor,
+            'debt_history' => $debt_history,
+            'payment_history' => $payment_history
         ];
     }
 
