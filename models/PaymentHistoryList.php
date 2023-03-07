@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "payment_history_list".
@@ -22,6 +23,16 @@ class PaymentHistoryList extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'payment_history_list';
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'updatedAtAttribute' => false
+            ]
+        ];
     }
 
     /**
