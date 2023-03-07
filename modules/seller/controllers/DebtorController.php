@@ -52,7 +52,7 @@ class DebtorController extends \app\controllers\BaseController
         ];
     }
 
-    public function actionPaydebt($id)
+    public function actionPayDebt($id)
     {
         $model = new PaymentHistoryList();
         if ($this->request->isPost) {
