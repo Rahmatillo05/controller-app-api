@@ -5,6 +5,7 @@ namespace app\modules\seller\controllers;
 use app\models\DebtHistory;
 use app\models\Debtor;
 use app\models\PaymentHistory;
+use app\models\PaymentHistoryList;
 use yii\web\MethodNotAllowedHttpException;
 use yii\web\NotFoundHttpException;
 
@@ -40,8 +41,8 @@ class DebtorController extends \app\controllers\BaseController
     public function actionView($id)
     {
         $debtor = $this->findModel($id);
-        $debt_history = DebtHistory::find()->orderBy(['id' => SORT_DESC])->all();
-        $payment_history = PaymentHistory::find()->orderBy(['id' => SORT_DESC])->all();
+        $debt_history = DebtHistory::find()->where(['debtor_id' => $debtor->id])->orderBy(['id' => SORT_DESC])->all();
+        $payment_history = PaymentHistoryList::find()->where(['debtor_id' => $debtor->id])->orderBy(['id' => SORT_DESC])->all();
 
         return [
             'debtor' => $debtor,
@@ -52,7 +53,7 @@ class DebtorController extends \app\controllers\BaseController
 
     private function findModel($id): ?Debtor
     {
-        if ($id != null){
+        if ($id != null) {
             return Debtor::findOne($id);
         }
         throw new NotFoundHttpException("Debtor is not found");

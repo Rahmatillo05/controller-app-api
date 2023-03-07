@@ -72,16 +72,8 @@ class Debtor extends \yii\db\ActiveRecord
         ];
     }
 
-    public function addNewDebtor($debt_amount = 0, $paid_amount = 0)
+    public function addNewDebtor()
     {
-        $payment = new PaymentHistory();
-        if ($this->save()) {
-            $payment->debtor_id = $this->id;
-            $payment->debt_amount = $debt_amount;
-            $payment->paid_amount = $paid_amount;
-            $payment->remaining_amount = $payment->debt_amount - $payment->paid_amount;
-            return $payment->save();
-        }
-        return $this->errors;
+        return $this->save() ?? $this->errors;
     }
 }

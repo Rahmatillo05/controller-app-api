@@ -222,7 +222,6 @@ class Selling extends \yii\db\ActiveRecord
         $r = false;
         $selling_id = [];
         $debtor = Debtor::findOne($debtorData['id']);
-        $payment_history = PaymentHistory::findOne(['debtor_id' => $debtorData['id']]);
         foreach ($sellingList as $item) {
             $this->category_id = $item['category_id'];
             $this->product_id = $item['product_id'];
@@ -237,7 +236,6 @@ class Selling extends \yii\db\ActiveRecord
                 throw new ServerErrorHttpException("Ma'lumotlarni saqlashda xatolik!");
             }
         }
-        $payment_history->updateDebtAmount($total_debt, $instant_payment);
         $debt_history_id = $this->createDebtHistory($debtor->id, $total_debt, $instant_payment);
         $this->createDebtHistoryList($debt_history_id, $selling_id);
         return $r;
@@ -268,13 +266,13 @@ class Selling extends \yii\db\ActiveRecord
         return $result;
     }
 
-    private function createDebtor($debtorData, $total_debt, $instant_payment)
+    private function createDebtor($debtorData)
     {
         $debtor = new Debtor();
         $debtor->full_name = $debtorData['full_name'];
         $debtor->address = $debtorData['address'];
         $debtor->phone_number = $debtorData['phone_number'];
-        if ($debtor->addNewDebtor($total_debt, $instant_payment)) {
+        if ($debtor->addNewDebtor()) {
             return $debtor->id;
         }
         return $debtor->errors;
