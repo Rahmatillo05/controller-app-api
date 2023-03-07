@@ -96,7 +96,9 @@ class Selling extends \yii\db\ActiveRecord
         return [
             'id',
             'sell_price',
-            'product_id',
+            'product_id' => function () {
+                return $this->product;
+            },
             'sell_amount',
             'type_sell',
             'type_pay',
