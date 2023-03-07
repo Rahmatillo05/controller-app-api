@@ -73,6 +73,23 @@ class DebtHistory extends \yii\db\ActiveRecord
         ];
     }
 
+    public function fields()
+    {
+        $data = [
+            'id',
+            'worker_id',
+            'debtor_id',
+            'debt_amount',
+            'pay_amount',
+            'created_at',
+            'history_list' => function () {
+                return $this->debtHistoryLists;
+            }
+        ];
+
+        return $data;
+    }
+
     /**
      * Gets query for [[DebtHistoryLists]].
      *
