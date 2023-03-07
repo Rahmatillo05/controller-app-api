@@ -47,6 +47,15 @@ class DebtHistoryList extends \yii\db\ActiveRecord
             'history_id' => 'History ID',
         ];
     }
+    public function fields()
+    {
+        return [
+            'id',
+            'selling_id' => function (){
+                return $this->selling;
+            }
+        ];
+    }
 
     /**
      * Gets query for [[History]].
