@@ -46,8 +46,9 @@ class DebtorController extends \app\controllers\BaseController
 
         return [
             'debtor' => $debtor,
+            'debt_stat' => $debtor->debtAmount,
             'debt_history' => $debt_history,
-            'payment_history' => $payment_history
+            'payment_history' => $payment_history,
         ];
     }
 
