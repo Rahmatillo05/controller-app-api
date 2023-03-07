@@ -80,7 +80,7 @@ class Debtor extends \yii\db\ActiveRecord
         return $this->save() ?? $this->errors;
     }
 
-    public function getDebtAount()
+    public function debtAmount()
     {
         $all_debt_amount = DebtHistory::find()->where(['debtor_id' => $this->id])->sum('debt_amount');
         $paid_debt1 = DebtHistory::find()->where(['debtor_id' => $this->id])->sum('pay_amount');
