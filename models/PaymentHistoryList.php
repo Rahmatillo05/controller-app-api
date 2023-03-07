@@ -8,11 +8,11 @@ use Yii;
  * This is the model class for table "payment_history_list".
  *
  * @property int $id
- * @property int|null $history_id
+ * @property int|null $debtor_id
  * @property int|null $pay_amount
  * @property int|null $created_at
  *
- * @property PaymentHistory $history
+ * @property Debtor $debtor
  */
 class PaymentHistoryList extends \yii\db\ActiveRecord
 {
@@ -30,8 +30,8 @@ class PaymentHistoryList extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['history_id', 'pay_amount', 'created_at'], 'integer'],
-            [['history_id'], 'exist', 'skipOnError' => true, 'targetClass' => PaymentHistory::class, 'targetAttribute' => ['history_id' => 'id']],
+            [['debtor_id', 'pay_amount', 'created_at'], 'integer'],
+            [['debtor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Debtor::class, 'targetAttribute' => ['debtor_id' => 'id']],
         ];
     }
 
@@ -42,19 +42,19 @@ class PaymentHistoryList extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'history_id' => 'History ID',
+            'debtor_id' => 'Debtor ID',
             'pay_amount' => 'Pay Amount',
             'created_at' => 'Created At',
         ];
     }
 
     /**
-     * Gets query for [[History]].
+     * Gets query for [[Debtor]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getHistory()
+    public function getDebtor()
     {
-        return $this->hasOne(PaymentHistory::class, ['id' => 'history_id']);
+        return $this->hasOne(Debtor::class, ['id' => 'debtor_id']);
     }
 }
