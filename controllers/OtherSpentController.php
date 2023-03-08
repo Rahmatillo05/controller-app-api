@@ -12,13 +12,12 @@ class OtherSpentController extends BaseController
 
     public function actionPlasticCardTax()
     {
-        $model = null;
         if (!PlasticCardTax::find()->all()) {
             $model = new PlasticCardTax();
         } else {
             $model = PlasticCardTax::find()->orderBy(['id' => SORT_DESC])->one();
         }
-        if ($this->request->isPost && $model->load($this->request->post())) {
+        if ($this->request->isPost && $model->load($this->request->post(), '')) {
             return $model->save() ? $model : $model->errors;
         } else {
             throw new MethodNotAllowedHttpException();
