@@ -27,7 +27,7 @@ class OtherSpentController extends BaseController
     public function actionPlasticCardTaxUpdate($id)
     {
         $model = PlasticCardTax::find()->where(['id' => $id])->one();
-        if ($this->request->isPut || $this->request->isPatch && $model->load($this->request->post())) {
+        if ($this->request->isPut || $this->request->isPatch && $model->load($this->request->post(), '')) {
             return $model->save() ? $model : $model->errors;
         } else {
             throw new MethodNotAllowedHttpException();
