@@ -55,4 +55,16 @@ class PlasticCardTax extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
         ];
     }
+
+    public function fields()
+    {
+        return [
+            'id',
+            'tax_amount' => function () {
+                return number_format($this->tax_amount, '0', '.', '');
+            },
+            'created_at',
+            'updated_at'
+        ];
+    }
 }
