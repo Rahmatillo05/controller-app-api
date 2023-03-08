@@ -4,6 +4,7 @@ namespace app\modules\seller\controllers;
 
 use app\controllers\BaseController;
 use app\models\Category;
+use app\models\Product;
 use app\models\Selling;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -52,13 +53,28 @@ class SellingController extends BaseController
         }
     }
 
-    public function actionCategory()
+    public function actionCategory(): ActiveDataProvider
     {
-        $category_data_provider = new ActiveDataProvider([
+        return new ActiveDataProvider([
             'query' => Category::find(),
             'pagination' => false
         ]);
+    }
 
-        return $category_data_provider;
+    public function actionProduct(): ActiveDataProvider
+    {
+        $category_id = Yii::$app->request->get('category_id');
+        if (!$category_id) {
+            $data = new ActiveDataProvider([
+                'query' => Product::find(),
+                'pagination' => false
+            ]);
+        }else{
+            $data = new ActiveDataProvider([
+                'query' => Product::find()->andWhere(['category_id' => $category_id]),
+                'pagination' => false
+            ]);
+        }
+        return $data;
     }
 }
