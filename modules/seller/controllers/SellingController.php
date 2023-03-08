@@ -3,8 +3,10 @@
 namespace app\modules\seller\controllers;
 
 use app\controllers\BaseController;
+use app\models\Category;
 use app\models\Selling;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\MethodNotAllowedHttpException;
 use yii\web\ServerErrorHttpException;
 
@@ -48,5 +50,15 @@ class SellingController extends BaseController
         } else {
             throw new MethodNotAllowedHttpException("Method Not Allowed. This URL can only handle the following request methods: POST.");
         }
+    }
+
+    public function actionCategory()
+    {
+        $category_data_provider = new ActiveDataProvider([
+            'query' => Category::find(),
+            'pagination' => false
+        ]);
+
+        return $category_data_provider;
     }
 }
