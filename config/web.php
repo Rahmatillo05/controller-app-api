@@ -69,6 +69,7 @@ $config = [
                         'product',
                         'other-spent',
                         'debtor',
+	                    'setting'
                     ],
                     'pluralize' => false
                 ]
