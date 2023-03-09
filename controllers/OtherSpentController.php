@@ -18,7 +18,6 @@ class OtherSpentController extends BaseController
             $model = PlasticCardTax::find()->orderBy(['id' => SORT_DESC])->one();
         }
         if ($this->request->isPost && $model->load($this->request->post(), '')) {
-			$model->tax_amount = $this->request->post('tax_amount');
             return $model->save() ? $model : $model->errors;
         } else {
             throw new MethodNotAllowedHttpException();
@@ -29,6 +28,7 @@ class OtherSpentController extends BaseController
     {
         $model = PlasticCardTax::find()->where(['id' => $id])->one();
         if ($this->request->isPut || $this->request->isPatch && $model->load($this->request->post(), '')) {
+	        $model->tax_amount = $this->request->post('tax_amount');
             return $model->save() ? $model : $model->errors;
         } else {
             throw new MethodNotAllowedHttpException();
