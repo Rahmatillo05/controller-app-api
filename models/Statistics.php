@@ -45,4 +45,27 @@ class Statistics extends \yii\db\ActiveRecord
 		];
 	}
 
+	public function saved ()
+	{
+		$this->total_spent = $this->calculateSpent();
+		$this->total_benefit = $this->calculateBenefit();
+		$this->pure_benefit = $this->calculatePureBenefit();
+		return $this->save() ? $this : $this->errors;
+	}
+
+	private function calculateSpent ()
+	{
+
+	}
+
+	private function calculateBenefit ()
+	{
+
+	}
+
+	private function calculatePureBenefit ()
+	{
+
+	}
+
 }

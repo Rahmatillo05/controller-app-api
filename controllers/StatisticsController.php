@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Statistics;
+use yii\web\MethodNotAllowedHttpException;
 
 class StatisticsController extends BaseController
 {
@@ -12,13 +13,18 @@ class StatisticsController extends BaseController
 	{
 		$actions = parent::actions();
 		unset($actions[ 'view' ], $actions[ 'delete' ], $actions[ 'update' ]);
-		
+
 		return $actions;
 	}
 
 	public function actionCreate ()
 	{
-		
+		$model = new Statistics();
+		if ( $this->request->isPost ) {
+			return $model->saved();
+		} else {
+			throw new MethodNotAllowedHttpException();
+		}
 	}
-	
+
 }
