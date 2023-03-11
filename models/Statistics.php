@@ -40,7 +40,6 @@ class Statistics extends \yii\db\ActiveRecord
 	public function rules ()
 	{
 		return [
-			[ [ 'total_spent', 'total_benefit', 'pure_benefit' ], 'required' ],
 			[ [ 'total_spent', 'total_benefit', 'pure_benefit' ], 'number' ],
 			[ [ 'created_at' ], 'integer' ],
 		];
