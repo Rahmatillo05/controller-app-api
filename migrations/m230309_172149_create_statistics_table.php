@@ -17,7 +17,8 @@ class m230309_172149_create_statistics_table extends Migration
 			'total_spent' => $this->money(),
 			'total_benefit' => $this->money(),
 			'pure_benefit' => $this->money(),
-			'created_at' => $this->integer()
+			'period' => $this->string(),
+			'created_at' => $this->integer(),
 		]);
 	}
 

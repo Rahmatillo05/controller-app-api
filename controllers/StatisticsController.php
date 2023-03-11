@@ -22,9 +22,9 @@ class StatisticsController extends BaseController
 
 	public function data ()
 	{
-		$period = (int)Yii::$app->request->get('period');
+		$period = Yii::$app->request->get('period');
 		return new ActiveDataProvider([
-			'query' => Statistics::find()->where([ '>=', 'created_at', strtotime('+' . $period . 'days') ]),
+			'query' => Statistics::find()->where([ '>=', 'period', date('Y-m-d H:i', strtotime("-{$period} days")) ]),
 			'pagination' => [
 				'pageSize' => 50
 			],

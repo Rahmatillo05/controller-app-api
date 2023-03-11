@@ -13,6 +13,7 @@ use yii\behaviors\TimestampBehavior;
  * @property float|null $total_benefit
  * @property float|null $pure_benefit
  * @property int|null $created_at
+ * @property string $period
  */
 class Statistics extends \yii\db\ActiveRecord
 {
@@ -50,6 +51,7 @@ class Statistics extends \yii\db\ActiveRecord
 		$this->total_spent = $this->calculateSpent();
 		$this->total_benefit = $this->calculateBenefit();
 		$this->pure_benefit = $this->calculatePureBenefit();
+		$this->period = date('Y-m-d H:i');
 		return $this->save() ? $this : $this->errors;
 	}
 
