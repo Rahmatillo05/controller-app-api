@@ -40,6 +40,7 @@ class Statistics extends \yii\db\ActiveRecord
 	public function rules ()
 	{
 		return [
+			[ [ 'total_spent', 'total_benefit', 'pure_benefit' ], 'required' ],
 			[ [ 'total_spent', 'total_benefit', 'pure_benefit' ], 'number' ],
 			[ [ 'created_at' ], 'integer' ],
 		];
@@ -57,7 +58,6 @@ class Statistics extends \yii\db\ActiveRecord
 	{
 		$product_spent = Product::find()->sum('purchase_price') ?? 0;
 		$other_spent = OtherSpent::find()->sum('sum') ?? 0;
-
 		return $product_spent + $other_spent;
 	}
 
