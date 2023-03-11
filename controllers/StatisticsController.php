@@ -12,7 +12,7 @@ class StatisticsController extends BaseController
 	public function actions ()
 	{
 		$actions = parent::actions();
-		unset($actions[ 'view' ], $actions[ 'delete' ], $actions[ 'update' ]);
+		unset($actions[ 'view' ], $actions[ 'delete' ], $actions[ 'update' ], $actions[ 'create' ]);
 
 		return $actions;
 	}
