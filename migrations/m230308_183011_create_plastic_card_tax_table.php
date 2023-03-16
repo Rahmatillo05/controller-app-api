@@ -18,6 +18,11 @@ class m230308_183011_create_plastic_card_tax_table extends Migration
             'created_at' => $this->integer(),
             'updated_at' => $this->integer()
         ]);
+        $this->insert('plastic_card_tax',  [
+            'tax_amount' => 3,
+            'created_at' => time(),
+            'updated_at' => time(),
+        ]);
     }
 
     /**
