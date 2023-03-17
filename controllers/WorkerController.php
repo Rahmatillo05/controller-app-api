@@ -15,6 +15,7 @@ class WorkerController extends BaseController
         $actions = parent::actions();
         $actions['index']['prepareDataProvider'] = [$this, 'setDataProvider'];
         unset($actions['create']);
+        unset($actions['view']);
         return $actions;
     }
 
@@ -41,6 +42,15 @@ class WorkerController extends BaseController
         }
 
         throw new MethodNotAllowedHttpException("Method not allowed");
+    }
+
+    public function actionView($id){
+
+    }
+
+    private function findModel($id)
+    {
+        
     }
 
 }

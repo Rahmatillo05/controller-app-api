@@ -75,6 +75,7 @@ class User extends ActiveRecord implements IdentityInterface
             'username' => 'Foydalanuvchi nomi',
             'password' => 'Parol',
             'phone_number' => 'Telefon raqami',
+            'address' => 'Yashash joyi',
             'auth_key' => 'Auth Key',
             'user_role' => 'User Role',
             'status' => 'Status',
