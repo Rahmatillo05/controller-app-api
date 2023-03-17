@@ -2,9 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\Selling;
 use app\models\User;
 use yii\data\ActiveDataProvider;
 use yii\web\MethodNotAllowedHttpException;
+use yii\web\NotFoundHttpException;
 
 class WorkerController extends BaseController
 {
@@ -44,13 +46,23 @@ class WorkerController extends BaseController
         throw new MethodNotAllowedHttpException("Method not allowed");
     }
 
-    public function actionView($id){
+    public function actionView($id)
+    {
+        $worker = $this->findModel($id);
+        $sellingList = Selling::findAll(['worker_id' => $worker->id]);
 
+        return [
+            'worker_data' => $worker,
+            'selling_list' => $sellingList
+        ];
     }
 
     private function findModel($id)
     {
-        
+        if ($id === null) {
+            throw new NotFoundHttpException("Ishchi topilmasi");
+        } else {
+            return User::findOne($id);
+        }
     }
-
 }
