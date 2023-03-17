@@ -114,7 +114,7 @@ class User extends ActiveRecord implements IdentityInterface
         $user = UserToken::findOne(['token' => $token]);
         if (!empty($user)) {
             return self::findOne(['id' => $user->user_id]);
-        } else{
+        } else {
             throw new UnauthorizedHttpException("Sizning yuborgan token eskirgan yoki mavjud emas!");
         }
     }
@@ -170,6 +170,7 @@ class User extends ActiveRecord implements IdentityInterface
                 return $this->username;
             },
             'phone_number',
+            'address',
             'user_role',
             'created_at',
             'updated_at'
