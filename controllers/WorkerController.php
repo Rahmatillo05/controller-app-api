@@ -17,6 +17,7 @@ class WorkerController extends BaseController
         $actions = parent::actions();
         $actions['index']['prepareDataProvider'] = [$this, 'setDataProvider'];
         unset($actions['create']);
+        unset($actions['delete']);
         unset($actions['view']);
         return $actions;
     }
@@ -57,7 +58,23 @@ class WorkerController extends BaseController
         ];
     }
 
-    private function findModel($id)
+    /**
+     * @throws NotFoundHttpException
+     * @throws MethodNotAllowedHttpException
+     */
+    public function actionDelete($id)
+    {
+        if ($this->request->isDelete) {
+            $model = $this->findModel($id);
+            $model->status = User::STATUS_DELETED;
+            return $model->save();
+        } else {
+            throw new MethodNotAllowedHttpException();
+        }
+    }
+
+
+    private function findModel($id): ?User
     {
         if ($id === null) {
             throw new NotFoundHttpException("Ishchi topilmasi");
