@@ -31,6 +31,7 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 10;
     const ROLE_ADMIN = 10;
     const ROLE_SELLER = 0;
+
     /**
      * {@inheritdoc}
      */
@@ -38,6 +39,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return 'user';
     }
+
     /**
      * {@inheritdoc}
      */
@@ -49,13 +51,14 @@ class User extends ActiveRecord implements IdentityInterface
             ]
         ];
     }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['first_name', 'last_name',  'phone_number', 'address'], 'required'],
+            [['first_name', 'last_name', 'phone_number', 'address'], 'required'],
             [['user_role', 'status', 'created_at', 'updated_at'], 'integer'],
             [['first_name', 'last_name', 'username', 'password', 'phone_number'], 'string', 'max' => 150],
             [['auth_key'], 'string', 'max' => 250],
@@ -87,7 +90,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * findAdminByUsername
      *
-     * @param  mixed $username
+     * @param mixed $username
      * @return User|null
      */
     public static function findAdminByUsername($username)
@@ -109,6 +112,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne($id);
     }
+
     public static function findIdentityByAccessToken($token, $type = null)
     {
         $user = UserToken::findOne(['token' => $token]);
@@ -118,18 +122,22 @@ class User extends ActiveRecord implements IdentityInterface
             throw new UnauthorizedHttpException("Sizning yuborgan token eskirgan yoki mavjud emas!");
         }
     }
+
     public function getId()
     {
         return $this->id;
     }
+
     public function getAuthKey()
     {
         return $this->auth_key;
     }
+
     public function validateAuthKey($authKey)
     {
         return $this->auth_key === $authKey;
     }
+
     /**
      * Validates password
      *
@@ -171,6 +179,7 @@ class User extends ActiveRecord implements IdentityInterface
             },
             'phone_number',
             'address',
+            'status',
             'user_role',
             'created_at',
             'updated_at'
