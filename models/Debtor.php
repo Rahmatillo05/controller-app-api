@@ -82,7 +82,7 @@ class Debtor extends \yii\db\ActiveRecord
 
     public function debtAmount(): array
     {
-        $all_debt_amount = DebtHistory::find()->where(['debtor_id' => $this->id])->sum('debt_amount');
+        $all_debt_amount = DebtHistory::find()->where(['debtor_id' => $this->id])->sum('debt_amount') ?? 0;
         $paid_debt1 = DebtHistory::find()->where(['debtor_id' => $this->id])->sum('pay_amount');
         $paid_debt2 = PaymentHistoryList::find()->where(['debtor_id' => $this->id])->sum('pay_amount');
         $remaining_debt = $all_debt_amount - ($paid_debt1 + $paid_debt2);
