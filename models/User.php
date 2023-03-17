@@ -105,7 +105,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findSellerByUsername($username)
     {
-        return self::findOne(['username' => $username, 'user_role' => self::ROLE_SELLER]);
+        return self::findOne(['username' => $username, 'user_role' => self::ROLE_SELLER, 'status' => self::STATUS_ACTIVE]);
     }
 
     public static function findIdentity($id)
@@ -117,7 +117,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $user = UserToken::findOne(['token' => $token]);
         if (!empty($user)) {
-            return self::findOne(['id' => $user->user_id]);
+            return self::findOne(['id' => $user->user_id, 'status'=> self::STATUS_ACTIVE]);
         } else {
             throw new UnauthorizedHttpException("Sizning yuborgan token eskirgan yoki mavjud emas!");
         }
