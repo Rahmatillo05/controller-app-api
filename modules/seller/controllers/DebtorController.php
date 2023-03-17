@@ -4,7 +4,6 @@ namespace app\modules\seller\controllers;
 
 use app\models\DebtHistory;
 use app\models\Debtor;
-use app\models\PaymentHistory;
 use app\models\PaymentHistoryList;
 use yii\web\MethodNotAllowedHttpException;
 use yii\web\NotFoundHttpException;
