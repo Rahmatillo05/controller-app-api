@@ -39,7 +39,6 @@ class WorkerController extends BaseController
                 $model->username = strtolower($model->first_name);
                 $model->user_role = User::ROLE_SELLER;
                 $model->setPassword($model->username);
-                $model->generateAuthKey();
                 return $model->save() ? $model : $model->errors;
             }
         }
