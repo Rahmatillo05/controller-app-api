@@ -217,6 +217,9 @@ class Selling extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * @throws ServerErrorHttpException
+     */
     public function saveWithoutDebtor($sellingList, $debtorData, $total_debt, $instant_payment)
     {
         $r = false;
