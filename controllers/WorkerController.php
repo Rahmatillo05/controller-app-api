@@ -18,6 +18,7 @@ class WorkerController extends BaseController
         $actions['index']['prepareDataProvider'] = [$this, 'setDataProvider'];
         unset($actions['create']);
         unset($actions['delete']);
+        unset($actions['update']);
         unset($actions['view']);
         return $actions;
     }
@@ -30,7 +31,21 @@ class WorkerController extends BaseController
 
         return $model;
     }
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+        if ($this->request->isPatch || $this->request->isPut) {
+            if ($model->load($this->request->post(), '')) {
+                $model->username = strtolower($model->first_name);
+                $model->user_role = User::ROLE_SELLER;
+                $model->setPassword($model->username);
+                $model->generateAuthKey();
+                return $model->save() ? $model : $model->errors;
+            }
+        }
 
+        throw new MethodNotAllowedHttpException("Method not allowed");
+    }
     public function actionCreate()
     {
         $model = new User();
