@@ -77,8 +77,9 @@ class DebtHistory extends \yii\db\ActiveRecord
     {
         $data = [
             'id',
-            'worker_id',
-            'debtor_id',
+            'worker_id' => function () {
+                return $this->worker;
+            },
             'debt_amount',
             'pay_amount',
             'created_at',
