@@ -118,7 +118,7 @@ class DebtHistory extends \yii\db\ActiveRecord
      */
     public function getWorker()
     {
-        $worker = $this->hasOne(User::class, ['id' => 'worker_id']);
+        $worker = User::findOne($this->worker_id);
 
         return [
             'first_name' => $worker->first_name,
