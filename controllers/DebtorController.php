@@ -43,8 +43,8 @@ class DebtorController extends \app\controllers\BaseController
     {
         $model = new PaymentHistoryList();
         if ($this->request->isPost) {
-            if ($model->load($this->request->post(), '') && $model->save()) {
-                return $model;
+            if ($model->load($this->request->post(), '')) {
+                return $model->save();
             } else {
                 return $model->errors;
             }
