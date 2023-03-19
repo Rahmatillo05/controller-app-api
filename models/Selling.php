@@ -109,7 +109,7 @@ class Selling extends \yii\db\ActiveRecord
             $model->sell_price = $product['sell_price'];
             $model->type_pay = $type_pay;
             if ($this->setProductAmount($model->sell_amount, $model->product_id) && $model->save()) {
-                $r[] = $this->id;
+                $r[] = $model->id;
             } else {
                 $r = false;
             }
@@ -134,7 +134,7 @@ class Selling extends \yii\db\ActiveRecord
     public function mixedSold(array $products, $type_pay, $on_cash, $on_plastic)
     {
         $mixSelling = new MixSelling();
-        if ($ids = $this->saveThis($products, $type_pay)){
+        if ($ids = $this->saveThis($products, $type_pay)) {
             return $mixSelling->saved($ids, $on_cash, $on_plastic);
         }
         throw new ServerErrorHttpException("Saqlashda xatolik bor!");
