@@ -32,6 +32,7 @@ class Selling extends \yii\db\ActiveRecord
     const PAY_ONLINE = 0; # Plastikka
     const PAY_DEBT = 5; # Qarzga
     const PAY_CASH = 10; # Naqd pulga
+    const MIX_PAY = 15; # Plastic va naqd shakldagi to'lo'v
     /**
      * @var mixed|null
      */
