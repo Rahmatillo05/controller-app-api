@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\OtherSpent;
+use app\models\PlasticCardTax;
 use app\models\Product;
 use app\models\Selling;
 use app\models\Statistics;
@@ -25,6 +26,7 @@ class HomeController extends Controller
         $data['product_sum'] = Product::find()->sum('purchase_price') ?? 0;
         $data['other_spent'] = OtherSpent::find()->sum('sum') ?? 0;
         $data['selling_sum'] = Selling::find()->sum('sell_price') ?? 0;
+        $data['plastic_card'] = (new PlasticCardTax())->calcSum();
         $data['last_week_statistics'] = Statistics::find()->orderBy(['id' => SORT_DESC])->limit(7)->all();
 
         return $data;

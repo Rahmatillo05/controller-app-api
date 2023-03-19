@@ -67,4 +67,9 @@ class PlasticCardTax extends \yii\db\ActiveRecord
             'updated_at'
         ];
     }
+
+    public function calcSum()
+    {
+
+    }
 }
