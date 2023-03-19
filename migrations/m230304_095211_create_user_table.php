@@ -45,6 +45,7 @@ class m230304_095211_create_user_table extends Migration
 			'password' => Yii::$app->security->generatePasswordHash('seller'),
 			'auth_key' => Yii::$app->security->generateRandomString(15),
 			'phone_number' => "+998999999999",
+            'user_role' => 0,
 			'created_at' => time(),
 			'updated_at' => time(),
 		]);

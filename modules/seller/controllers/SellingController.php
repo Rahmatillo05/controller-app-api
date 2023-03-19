@@ -20,12 +20,17 @@ class SellingController extends BaseController
      * @throws ServerErrorHttpException
      * @throws MethodNotAllowedHttpException
      */
-    public function actionSelling()
+    public function actionSelling(): bool
     {
         $model = new Selling();
         if ($this->request->isPost) {
             $productList = $this->request->post('productList');
             $type_pay = $this->request->post('type_pay');
+            $on_cash = $this->request->post('on_cash');
+            $on_plastic = $this->request->post('on_plastic');
+            if ($type_pay === Selling::MIX_PAY) {
+                return $model->mixedSold($productList, $type_pay, $on_cash, $on_plastic);
+            }
             return $model->soldOnCash($productList, $type_pay);
         }
         throw new MethodNotAllowedHttpException();
@@ -69,7 +74,7 @@ class SellingController extends BaseController
                 'query' => Product::find(),
                 'pagination' => false
             ]);
-        }else{
+        } else {
             $data = new ActiveDataProvider([
                 'query' => Product::find()->andWhere(['category_id' => $category_id]),
                 'pagination' => false

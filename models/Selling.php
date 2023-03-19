@@ -73,25 +73,6 @@ class Selling extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'category_id' => 'Category ID',
-            'product_id' => 'Product ID',
-            'worker_id' => 'Worker ID',
-            'sell_price' => 'Sell Price',
-            'sell_amount' => 'Sell Amount',
-            'type_sell' => 'Type Sell',
-            'type_pay' => 'Type Pay',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-        ];
-    }
-
     public function fields()
     {
         return [
@@ -113,53 +94,10 @@ class Selling extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getWorkerData()
-    {
-        $worker = User::findOne($this->worker_id);
-
-        return [
-            'id' => $worker->id,
-            'first_name' => $worker->first_name,
-            'last_name' => $worker->last_name,
-            'phone_number' => $worker->phone_number,
-            'address' => $worker->address
-        ];
-    }
-
-    /**
-     * Gets query for [[Category]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCategory()
-    {
-        return $this->hasOne(Category::class, ['id' => 'category_id']);
-    }
-
-    /**
-     * Gets query for [[Product]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProduct()
-    {
-        return $this->hasOne(Product::class, ['id' => 'product_id']);
-    }
-
-    /**
-     * Gets query for [[Worker]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getWorker()
-    {
-        return $this->hasOne(User::class, ['id' => 'worker_id']);
-    }
-
     /**
      * @throws ServerErrorHttpException
      */
-    public function soldOnCash(array $products, $type_pay)
+    public function saveThis($products, $type_pay): array
     {
         $r = [];
         foreach ($products as $product) {
@@ -171,9 +109,9 @@ class Selling extends \yii\db\ActiveRecord
             $model->sell_price = $product['sell_price'];
             $model->type_pay = $type_pay;
             if ($this->setProductAmount($model->sell_amount, $model->product_id) && $model->save()) {
-                $r = true;
+                $r[] = $this->id;
             } else {
-                $r = $model->errors;
+                $r = false;
             }
         }
         return $r;
@@ -182,7 +120,30 @@ class Selling extends \yii\db\ActiveRecord
     /**
      * @throws ServerErrorHttpException
      */
-    public function saveWithDebtor($sellingList, $debtorData, $total_debt, $instant_payment)
+    public function soldOnCash(array $products, $type_pay): bool
+    {
+        if ($this->saveThis($products, $type_pay)) {
+            return true;
+        }
+        throw new ServerErrorHttpException("Saqlashda xatolik bor!");
+    }
+
+    /**
+     * @throws ServerErrorHttpException
+     */
+    public function mixedSold(array $products, $type_pay, $on_cash, $on_plastic)
+    {
+        $mixSelling = new MixSelling();
+        if ($ids = $this->saveThis($products, $type_pay)){
+            return $mixSelling->saved($ids, $on_cash, $on_plastic);
+        }
+        throw new ServerErrorHttpException("Saqlashda xatolik bor!");
+    }
+
+    /**
+     * @throws ServerErrorHttpException
+     */
+    public function saveWithDebtor($sellingList, $debtorData, $total_debt, $instant_payment): bool
     {
         $r = false;
         $selling_id = [];
@@ -280,5 +241,49 @@ class Selling extends \yii\db\ActiveRecord
             return $debtor->id;
         }
         return $debtor->errors;
+    }
+
+
+    public function getWorkerData()
+    {
+        $worker = User::findOne($this->worker_id);
+
+        return [
+            'id' => $worker->id,
+            'first_name' => $worker->first_name,
+            'last_name' => $worker->last_name,
+            'phone_number' => $worker->phone_number,
+            'address' => $worker->address
+        ];
+    }
+
+    /**
+     * Gets query for [[Category]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategory()
+    {
+        return $this->hasOne(Category::class, ['id' => 'category_id']);
+    }
+
+    /**
+     * Gets query for [[Product]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProduct()
+    {
+        return $this->hasOne(Product::class, ['id' => 'product_id']);
+    }
+
+    /**
+     * Gets query for [[Worker]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWorker()
+    {
+        return $this->hasOne(User::class, ['id' => 'worker_id']);
     }
 }
