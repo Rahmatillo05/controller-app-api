@@ -75,9 +75,36 @@ class Debtor extends \yii\db\ActiveRecord
         ];
     }
 
+    public function fields()
+    {
+        return [
+            'id',
+            'full_name',
+            'address',
+            'phone_number',
+            'worker_id' => function () {
+                return $this->worker;
+            },
+            'created_at',
+        ];
+    }
+
     public function addNewDebtor()
     {
         return $this->save() ?? $this->errors;
+    }
+
+    public function getWorker()
+    {
+        $worker = User::findOne($this->worker_id);
+
+        return [
+            'first_name' => $worker->first_name,
+            'last_name' => $worker->last_name,
+            'address' => $worker->address,
+            'phone_number' => $worker->phone_number,
+
+        ];
     }
 
     public function debtAmount(): array
