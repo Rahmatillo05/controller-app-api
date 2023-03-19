@@ -99,6 +99,7 @@ class Debtor extends \yii\db\ActiveRecord
         $worker = User::findOne($this->worker_id);
 
         return [
+            'id' => $worker->id,
             'first_name' => $worker->first_name,
             'last_name' => $worker->last_name,
             'address' => $worker->address,
