@@ -76,9 +76,7 @@ class Statistics extends \yii\db\ActiveRecord
 
 	private function calculatePlasticCardTax ()
 	{
-		$sell_online = Selling::find()->where([ 'type_sell' => Selling::PAY_ONLINE ])->sum('sell_price') ?? 0;
-		$plastic_card_tax = PlasticCardTax::find()->orderBy([ 'id' => SORT_DESC ])->one();
-		return $sell_online * ( $plastic_card_tax->tax_amount / 100 );
+        return (new PlasticCardTax())->calcSum();
 	}
 
 	private function calculateDebtAmount ()

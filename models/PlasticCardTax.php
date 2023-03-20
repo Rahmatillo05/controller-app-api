@@ -72,6 +72,7 @@ class PlasticCardTax extends \yii\db\ActiveRecord
     {
         $mixSelling = MixSelling::find()->sum('on_plastic' ?? 0);
         $selling = Selling::find()->where(['type_pay' => Selling::PAY_ONLINE])->sum('sell_price') ?? 0;
-        return ($mixSelling + $selling) * ($this->tax_amount / 100);
+        $taxAmount = self::find()->orderBy(['id' => SORT_DESC])->one();
+        return ($mixSelling + $selling) * ($taxAmount->tax_amount / 100);
     }
 }
