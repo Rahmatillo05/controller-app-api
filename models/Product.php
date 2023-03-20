@@ -83,7 +83,9 @@ class Product extends \yii\db\ActiveRecord
             'product_name',
             'amount',
             'each_amount',
-            'all_amount',
+            'all_amount' => function () {
+                return $this->productRemain();
+            },
             'purchase_price',
             'wholesale_price',
             'retail_price',
@@ -122,5 +124,11 @@ class Product extends \yii\db\ActiveRecord
         $product_amount->has_came_product = $this->all_amount;
         $product_amount->remaining_product = $product_amount->has_came_product - $product_amount->sold_product;
         return $product_amount->save();
+    }
+
+    private function productRemain(): ?int
+    {
+        $productAmount = ProductAmount::findOne($this->id);
+        return $productAmount->remaining_product;
     }
 }
