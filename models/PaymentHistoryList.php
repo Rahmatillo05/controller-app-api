@@ -57,7 +57,19 @@ class PaymentHistoryList extends \yii\db\ActiveRecord
             'id' => 'ID',
             'debtor_id' => 'Debtor ID',
             'pay_amount' => 'Pay Amount',
+            'type_pay' => 'Type Pay',
             'created_at' => 'Created At',
+        ];
+    }
+
+    public function fields()
+    {
+        return [
+            'id',
+            'debtor_id',
+            'pay_amount',
+            'type_pay',
+            'created_at'
         ];
     }
 
