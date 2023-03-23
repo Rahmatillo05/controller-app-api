@@ -14,16 +14,13 @@ use yii\behaviors\TimestampBehavior;
  * @property string|null $phone_number
  * @property int|null $worker_id
  * @property int|null $created_at
+ *
+ * @property DebtHistory[] $debtHistories
+ * @property PaymentHistoryList[] $paymentHistoryLists
+ * @property User $worker
  */
 class Debtor extends \yii\db\ActiveRecord
 {
-    /**
-     * @var mixed|null
-     */
-    /**
-     * @var mixed|null
-     */
-
     /**
      * {@inheritdoc}
      */
@@ -55,24 +52,10 @@ class Debtor extends \yii\db\ActiveRecord
         return [
             [['full_name'], 'required'],
             [['worker_id', 'created_at'], 'integer'],
-            [['full_name', 'address', 'phone_number'], 'string', 'max' => 255],
+            [['full_name', 'phone_number'], 'string', 'max' => 255],
+            [['worker_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['worker_id' => 'id']],
         ];
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'full_name' => 'Full Name',
-            'phone_number' => 'Phone Number',
-            'worker_id' => 'Worker ID',
-            'created_at' => 'Created At',
-        ];
-    }
-
     public function fields()
     {
         return [
@@ -87,6 +70,39 @@ class Debtor extends \yii\db\ActiveRecord
             },
             'created_at',
         ];
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'full_name' => 'Full Name',
+            'phone_number' => 'Phone Number',
+            'worker_id' => 'Worker ID',
+            'created_at' => 'Created At',
+        ];
+    }
+
+    /**
+     * Gets query for [[DebtHistories]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDebtHistories()
+    {
+        return $this->hasMany(DebtHistory::class, ['debtor_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[PaymentHistoryLists]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPaymentHistoryLists()
+    {
+        return $this->hasMany(PaymentHistoryList::class, ['debtor_id' => 'id']);
     }
 
     public function addNewDebtor()
