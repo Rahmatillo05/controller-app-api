@@ -12,11 +12,13 @@ use yii\behaviors\TimestampBehavior;
  * @property int|null $debtor_id
  * @property int|null $pay_amount
  * @property int|null $created_at
- *
+ * @property int $type_pay
  * @property Debtor $debtor
  */
 class PaymentHistoryList extends \yii\db\ActiveRecord
 {
+    const PAY_ONLINE = 0; # Plastikka
+    const PAY_CASH = 10; # Naqd pulga
     /**
      * {@inheritdoc}
      */
@@ -41,7 +43,7 @@ class PaymentHistoryList extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['debtor_id', 'pay_amount', 'created_at'], 'integer'],
+            [['debtor_id', 'pay_amount', 'created_at', 'type_pay'], 'integer'],
             [['debtor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Debtor::class, 'targetAttribute' => ['debtor_id' => 'id']],
         ];
     }
