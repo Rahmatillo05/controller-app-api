@@ -11,7 +11,6 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property int $id
  * @property string $full_name
- * @property string $address
  * @property string|null $phone_number
  * @property int|null $worker_id
  * @property int|null $created_at
@@ -54,7 +53,7 @@ class Debtor extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['full_name', 'address'], 'required'],
+            [['full_name'], 'required'],
             [['worker_id', 'created_at'], 'integer'],
             [['full_name', 'address', 'phone_number'], 'string', 'max' => 255],
         ];
@@ -80,10 +79,12 @@ class Debtor extends \yii\db\ActiveRecord
         return [
             'id',
             'full_name',
-            'address',
             'phone_number',
             'worker_id' => function () {
                 return $this->worker;
+            },
+            'debt_amount' => function(){
+                return $this->allDebt();
             },
             'created_at',
         ];
@@ -119,5 +120,10 @@ class Debtor extends \yii\db\ActiveRecord
             'paid_debt' => $paid_debt1 + $paid_debt2,
             'remaining_debt_amount' => $remaining_debt,
         ];
+    }
+
+    public function allDebt()
+    {
+        return $this->debtAmount()['remaining_debt_amount'];
     }
 }
