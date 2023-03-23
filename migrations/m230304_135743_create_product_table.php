@@ -16,8 +16,6 @@ class m230304_135743_create_product_table extends Migration
             'id' => $this->primaryKey(),
             'category_id' => $this->integer(),
             'product_name' => $this->string(200)->notNull(),
-            'amount' => $this->integer()->notNull(),
-            'each_amount' => $this->integer()->notNull(),
             'all_amount' => $this->integer()->notNull(),
             'purchase_price' => $this->integer()->notNull(),
             'wholesale_price' => $this->integer()->notNull(),
