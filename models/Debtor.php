@@ -67,7 +67,6 @@ class Debtor extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'full_name' => 'Full Name',
-            'address' => 'Address',
             'phone_number' => 'Phone Number',
             'worker_id' => 'Worker ID',
             'created_at' => 'Created At',
