@@ -14,6 +14,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int|null $debtor_id
  * @property int $debt_amount
  * @property int|null $pay_amount
+ * @property int $type_pay
  * @property int|null $created_at
  *
  * @property DebtHistoryList[] $debtHistoryLists
@@ -22,6 +23,10 @@ use yii\behaviors\TimestampBehavior;
  */
 class DebtHistory extends \yii\db\ActiveRecord
 {
+
+    const PAY_ONLINE = 0; # Plastikka
+    const PAY_CASH = 10; # Naqd pulga
+
     /**
      * {@inheritdoc}
      */
@@ -51,7 +56,7 @@ class DebtHistory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_id', 'debtor_id', 'debt_amount', 'pay_amount', 'created_at'], 'integer'],
+            [['worker_id', 'debtor_id', 'type_pay', 'debt_amount', 'pay_amount', 'created_at'], 'integer'],
             [['debt_amount'], 'required'],
             [['debtor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Debtor::class, 'targetAttribute' => ['debtor_id' => 'id']],
             [['worker_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['worker_id' => 'id']],
@@ -67,6 +72,7 @@ class DebtHistory extends \yii\db\ActiveRecord
             'id' => 'ID',
             'worker_id' => 'Worker ID',
             'debtor_id' => 'Debtor ID',
+            'type_pay' => 'Type Pay',
             'debt_amount' => 'Debt Amount',
             'pay_amount' => 'Pay Amount',
             'created_at' => 'Created At',
@@ -75,20 +81,19 @@ class DebtHistory extends \yii\db\ActiveRecord
 
     public function fields()
     {
-        $data = [
+        return [
             'id',
             'worker_id' => function () {
                 return $this->worker;
             },
             'debt_amount',
             'pay_amount',
+            'type_pay',
             'created_at',
             'history_list' => function () {
                 return $this->debtHistoryLists;
             }
         ];
-
-        return $data;
     }
 
     /**
