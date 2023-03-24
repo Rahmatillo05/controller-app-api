@@ -143,7 +143,7 @@ class Selling extends \yii\db\ActiveRecord
     /**
      * @throws ServerErrorHttpException
      */
-    public function saveWithDebtor($sellingList, $debtorData, $total_debt, $instant_payment): bool
+    public function saveWithDebtor($sellingList, $debtorData, $total_debt, $instant_payment, $type_pay): bool
     {
         $r = false;
         $selling_id = [];
@@ -162,7 +162,7 @@ class Selling extends \yii\db\ActiveRecord
             }
         }
         $debtor_id = $this->createDebtor($debtorData, $total_debt, $instant_payment);
-        $debt_history_id = $this->createDebtHistory($debtor_id, $total_debt, $instant_payment);
+        $debt_history_id = $this->createDebtHistory($debtor_id, $total_debt, $instant_payment, $type_pay);
         $this->createDebtHistoryList($debt_history_id, $selling_id);
         return $r;
     }
@@ -182,7 +182,7 @@ class Selling extends \yii\db\ActiveRecord
     /**
      * @throws ServerErrorHttpException
      */
-    public function saveWithoutDebtor($sellingList, $debtorData, $total_debt, $instant_payment)
+    public function saveWithoutDebtor($sellingList, $debtorData, $total_debt, $instant_payment, $type_pay)
     {
         $r = false;
         $selling_id = [];
@@ -201,17 +201,18 @@ class Selling extends \yii\db\ActiveRecord
                 throw new ServerErrorHttpException("Ma'lumotlarni saqlashda xatolik!");
             }
         }
-        $debt_history_id = $this->createDebtHistory($debtor->id, $total_debt, $instant_payment);
+        $debt_history_id = $this->createDebtHistory($debtor->id, $total_debt, $instant_payment, $type_pay);
         $this->createDebtHistoryList($debt_history_id, $selling_id);
         return $r;
     }
 
-    public function createDebtHistory($debtor, $total_debt, $instant_payment): int
+    public function createDebtHistory($debtor, $total_debt, $instant_payment,  $type_pay): int
     {
         $debt_history = new DebtHistory();
         $debt_history->debtor_id = $debtor;
         $debt_history->debt_amount = $total_debt;
         $debt_history->pay_amount = $instant_payment;
+        $debt_history->type_pay = $type_pay;
         if ($debt_history->save()) {
             return $debt_history->id;
         } else {

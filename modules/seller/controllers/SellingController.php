@@ -40,7 +40,7 @@ class SellingController extends BaseController
      * @throws MethodNotAllowedHttpException
      * @throws ServerErrorHttpException
      */
-    public function actionSellingDebt()
+    public function actionSellingDebt(): bool
     {
         $model = new Selling();
         if (Yii::$app->request->isPost) {
@@ -48,11 +48,12 @@ class SellingController extends BaseController
             $debtorData = $this->request->post('debtorData');
             $total_debt = $this->request->post('total_debt');
             $instant_payment = $this->request->post('instant_payment');
+            $instant_payment_type = $this->request->post('instant_payment_type');
             $isCreate = $this->request->post('isCreate');
             if ($isCreate) {
-                return $model->saveWithDebtor($sellingList, $debtorData, $total_debt, $instant_payment);
+                return $model->saveWithDebtor($sellingList, $debtorData, $total_debt, $instant_payment, $instant_payment_type);
             }
-            return $model->saveWithoutDebtor($sellingList, $debtorData, $total_debt, $instant_payment);
+            return $model->saveWithoutDebtor($sellingList, $debtorData, $total_debt, $instant_payment, $instant_payment_type);
         } else {
             throw new MethodNotAllowedHttpException("Method Not Allowed. This URL can only handle the following request methods: POST.");
         }

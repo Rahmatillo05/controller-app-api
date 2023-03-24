@@ -119,7 +119,7 @@ class DebtHistory extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Worker]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return array
      */
     public function getWorker()
     {
