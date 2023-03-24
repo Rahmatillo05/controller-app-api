@@ -236,7 +236,6 @@ class Selling extends \yii\db\ActiveRecord
     {
         $debtor = new Debtor();
         $debtor->full_name = $debtorData['full_name'];
-        $debtor->address = $debtorData['address'];
         $debtor->phone_number = $debtorData['phone_number'];
         if ($debtor->addNewDebtor()) {
             return $debtor->id;
