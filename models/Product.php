@@ -16,6 +16,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int $wholesale_price
  * @property int $retail_price
  * @property int|null $created_at
+ * @property int|null $updated_at
  * @property Category $category
  */
 class Product extends \yii\db\ActiveRecord
@@ -33,7 +34,6 @@ class Product extends \yii\db\ActiveRecord
         return [
             [
                 'class' => TimestampBehavior::class,
-                'updatedAtAttribute' => false
             ]
         ];
     }
