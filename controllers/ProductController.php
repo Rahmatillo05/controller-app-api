@@ -59,7 +59,7 @@ class ProductController extends BaseController
         $model = $this->findModel($id);
         if ($this->request->isPut || $this->request->isPatch) {
             if ($model->load($this->request->post(), '')) {
-                if ($model->updateProductAmount() && $model->save()) {
+                if ($model->updateProductAmount($model->id) && $model->save()) {
                     return $model;
                 } else {
                     return $model->errors;
