@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\base\Exception;
 use yii\base\Model;
 
 /**
@@ -55,20 +56,18 @@ class AdminLoginForm extends Model
 
     /**
      * Logs in a user using the provided username and password.
-     * @return bool whether the user is logged in successfully
+     * @return false whether the user is logged in successfully
+     * @throws Exception
      */
     public function login()
     {
         if ($this->validate()) {
             if (Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0)) {
-                $token = new UserToken();
-                $token->token = Yii::$app->security->generateRandomString(42);
-                $token->user_id = $this->getUser()->id;
-                $token->created_at = time();
-                $token->save();
+                $token = (new UserToken())->generateToken($this->getUser()->id);
+
                 return [
                     'user_data' => $this->getUser(),
-                    'token' => $token->token
+                    'token' => $token
                 ];
             }
         }

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\base\Exception;
 
 /**
  * This is the model class for table "user_token".
@@ -23,6 +24,7 @@ class UserToken extends \yii\db\ActiveRecord
     {
         return 'user_token';
     }
+
     /**
      * {@inheritdoc}
      */
@@ -56,5 +58,21 @@ class UserToken extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function generateToken($user_id): ?string
+    {
+        $token = self::findOne(['user_id' => $user_id]);
+        if (!$token) {
+            $token = new $this;
+            $token->user_id = $user_id;
+            $token->token = Yii::$app->security->generateRandomString(42);
+            $token->created_at = time();
+            $token->save();
+        }
+        return $token->token;
     }
 }
