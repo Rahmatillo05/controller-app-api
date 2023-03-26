@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\AdminLoginForm;
 use app\modules\seller\models\SellerLoginForm;
 use Yii;
+use yii\base\Exception;
 use yii\rest\Controller;
 use yii\web\MethodNotAllowedHttpException;
 
@@ -12,6 +13,10 @@ class AuthController extends Controller
 {
     public $defaultAction = 'admin-login';
 
+    /**
+     * @throws Exception
+     * @throws MethodNotAllowedHttpException
+     */
     public function actionAdminLogin()
     {
         $model = new AdminLoginForm();
@@ -26,6 +31,11 @@ class AuthController extends Controller
             throw new MethodNotAllowedHttpException("Method Not Allowed. This URL can only handle the following request methods: POST.");
         }
     }
+
+    /**
+     * @throws Exception
+     * @throws MethodNotAllowedHttpException
+     */
     public function actionSellerLogin()
     {
         $model = new SellerLoginForm();
