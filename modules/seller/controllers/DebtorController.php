@@ -4,6 +4,7 @@ namespace app\modules\seller\controllers;
 
 use app\models\DebtHistory;
 use app\models\Debtor;
+use app\models\OldDebt;
 use app\models\PaymentHistoryList;
 use yii\web\MethodNotAllowedHttpException;
 use yii\web\NotFoundHttpException;
@@ -64,7 +65,17 @@ class DebtorController extends \app\controllers\BaseController
             throw new MethodNotAllowedHttpException();
         }
     }
-
+    public function actionAddDebt()
+    {
+        $model = new OldDebt();
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post(), '')) {
+                return $model->save();
+            }
+        } else {
+            throw new MethodNotAllowedHttpException();
+        }
+    }
     private function findModel($id): ?Debtor
     {
         if ($id != null) {
