@@ -20,7 +20,8 @@ class m230304_135743_create_product_table extends Migration
             'purchase_price' => $this->integer()->notNull(),
             'wholesale_price' => $this->integer()->notNull(),
             'retail_price' => $this->integer()->notNull(),
-            'created_at' => $this->integer()
+            'created_at' => $this->integer(),
+            'updated_at' => $this->integer()
         ]);
         $this->addForeignKey('fk-from-product-to-category', 'product', 'category_id', 'category', 'id', 'CASCADE');
     }
