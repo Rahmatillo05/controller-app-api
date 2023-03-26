@@ -18,6 +18,7 @@ class m230306_110105_create_debt_history_table extends Migration
             'debtor_id' => $this->integer(),
             'debt_amount' => $this->integer()->notNull(),
             'pay_amount' => $this->integer(),
+            'type_pay' => $this->integer(),
             'created_at' => $this->integer()
         ]);
         $this->addForeignKey('fk-from-backlog-to-worker', 'debt_history', 'worker_id', 'user', 'id', 'CASCADE');
