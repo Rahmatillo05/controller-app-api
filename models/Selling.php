@@ -131,7 +131,7 @@ class Selling extends \yii\db\ActiveRecord
     /**
      * @throws ServerErrorHttpException
      */
-    public function mixedSold(array $products, $type_pay, $on_cash, $on_plastic)
+    public function mixedSold(array $products, $type_pay, $on_cash, $on_plastic): bool
     {
         $mixSelling = new MixSelling();
         if ($ids = $this->saveThis($products, $type_pay)) {
@@ -167,6 +167,9 @@ class Selling extends \yii\db\ActiveRecord
         return $r;
     }
 
+    /**
+     * @throws ServerErrorHttpException
+     */
     public function setProductAmount($sold_product_amount, $product_id): bool
     {
         $product = ProductAmount::findOne(['product_id' => $product_id]);
