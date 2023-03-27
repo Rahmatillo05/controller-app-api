@@ -16,6 +16,7 @@ class m230306_163121_create_payment_history_list_table extends Migration
             'id' => $this->primaryKey(),
             'debtor_id' => $this->integer(),
             'pay_amount' => $this->integer(),
+            'type_pay' => $this->integer(),
             'created_at' => $this->integer(),
         ]);
         $this->addForeignKey('fk-payment_history_list-to-debtor', 'payment_history_list', 'debtor_id', 'debtor', 'id', 'CASCADE');
