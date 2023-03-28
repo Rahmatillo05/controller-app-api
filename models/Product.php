@@ -45,7 +45,7 @@ class Product extends \yii\db\ActiveRecord
     {
         return [
             [['category_id', 'all_amount', 'purchase_price', 'wholesale_price', 'retail_price', 'created_at', 'updated_at'], 'integer'],
-            [['product_name',  'all_amount', 'purchase_price', 'wholesale_price', 'retail_price'], 'required'],
+            [['product_name', 'all_amount', 'purchase_price', 'wholesale_price', 'retail_price'], 'required'],
             [['product_name'], 'string', 'max' => 200],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
         ];
@@ -115,7 +115,7 @@ class Product extends \yii\db\ActiveRecord
     {
         $product_amount = ProductAmount::findOne(['product_id' => $id]);
         $product_amount->has_came_product += $this->all_amount;
-        $product_amount->remaining_product += $product_amount->has_came_product - $product_amount->sold_product;
+        $product_amount->remaining_product = $product_amount->has_came_product - $product_amount->sold_product;
         return $product_amount->save();
     }
 
