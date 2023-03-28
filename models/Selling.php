@@ -145,7 +145,7 @@ class Selling extends \yii\db\ActiveRecord
      */
     public function saveWithDebtor($sellingList, $debtorData, $total_debt, $instant_payment, $type_pay): bool
     {
-        if ($selling_id = $this->saveThis($sellingList, $type_pay)){
+        if ($selling_id = $this->saveThis($sellingList, $type_pay)) {
             $debtor_id = $this->createDebtor($debtorData);
             $debt_history_id = $this->createDebtHistory($debtor_id, $total_debt, $instant_payment, $type_pay);
             $this->createDebtHistoryList($debt_history_id, $selling_id);
@@ -174,29 +174,17 @@ class Selling extends \yii\db\ActiveRecord
      */
     public function saveWithoutDebtor($sellingList, $debtorData, $total_debt, $instant_payment, $type_pay)
     {
-        $r = false;
-        $selling_id = [];
-        $debtor = Debtor::findOne($debtorData['id']);
-        foreach ($sellingList as $item) {
-            $this->category_id = $item['category_id'];
-            $this->product_id = $item['product_id'];
-            $this->type_sell = $item['type_sell'];
-            $this->sell_amount = $item['sell_amount'];
-            $this->sell_price = $item['sell_price'];
-            $this->type_pay = self::PAY_DEBT;
-            if ($this->setProductAmount($this->sell_amount, $this->product_id)) {
-                $r = $this->save();
-                $selling_id[] = $this->id;
-            } else {
-                throw new ServerErrorHttpException("Ma'lumotlarni saqlashda xatolik!");
-            }
-        }
-        $debt_history_id = $this->createDebtHistory($debtor->id, $total_debt, $instant_payment, $type_pay);
-        $this->createDebtHistoryList($debt_history_id, $selling_id);
-        return $r;
+       if( $selling_id = $this->saveThis($sellingList, $type_pay)){
+           $debtor = Debtor::findOne($debtorData['id']);
+           $debt_history_id = $this->createDebtHistory($debtor->id, $total_debt, $instant_payment, $type_pay);
+           $this->createDebtHistoryList($debt_history_id, $selling_id);
+           return true;
+       }
+        throw new ServerErrorHttpException("Saqlashda xatolik bor!");
+
     }
 
-    public function createDebtHistory($debtor, $total_debt, $instant_payment,  $type_pay): int
+    public function createDebtHistory($debtor, $total_debt, $instant_payment, $type_pay): int
     {
         $debt_history = new DebtHistory();
         $debt_history->debtor_id = $debtor;
