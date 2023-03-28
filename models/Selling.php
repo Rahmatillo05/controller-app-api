@@ -146,7 +146,7 @@ class Selling extends \yii\db\ActiveRecord
     public function saveWithDebtor($sellingList, $debtorData, $total_debt, $instant_payment, $type_pay): bool
     {
         if ($selling_id = $this->saveThis($sellingList, $type_pay)){
-            $debtor_id = $this->createDebtor($debtorData, $total_debt, $instant_payment);
+            $debtor_id = $this->createDebtor($debtorData);
             $debt_history_id = $this->createDebtHistory($debtor_id, $total_debt, $instant_payment, $type_pay);
             $this->createDebtHistoryList($debt_history_id, $selling_id);
             return true;
