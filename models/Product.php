@@ -115,7 +115,7 @@ class Product extends \yii\db\ActiveRecord
     {
         $product_amount = ProductAmount::findOne(['product_id' => $id]);
         $product_amount->has_came_product = $this->all_amount;
-        $product_amount->remaining_product = $product_amount->has_came_product - $product_amount->sold_product;
+        $product_amount->remaining_product += $product_amount->has_came_product - $product_amount->sold_product;
         return $product_amount->save();
     }
 
