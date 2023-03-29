@@ -72,6 +72,7 @@ class StatisticsDetail extends \yii\db\ActiveRecord
     {
         $this->product_sum = $this->productSum();
         $this->on_cash = $this->onCash();
+        $this->on_plastic = $this->onPlastic();
     }
 
     private function productSum()
@@ -84,7 +85,7 @@ class StatisticsDetail extends \yii\db\ActiveRecord
             ->scalar() ?? 0;
     }
 
-    public function onCash()
+    private function onCash()
     {
         $lastDayUnix = strtotime('yesterday');
         $selling = Selling::find()
@@ -94,6 +95,19 @@ class StatisticsDetail extends \yii\db\ActiveRecord
         $mix_selling = MixSelling::find()
             ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
             ->sum('on_cash') ?? 0;
+        return $selling + $mix_selling;
+    }
+
+    private function onPlastic()
+    {
+        $lastDayUnix = strtotime('yesterday');
+        $selling = Selling::find()
+            ->where(['between', 'updated_at', $lastDayUnix, $lastDayUnix + 86399])
+            ->andWhere(['type_pay' => Selling::PAY_ONLINE])
+            ->sum('sell_price') ?? 0;
+        $mix_selling = MixSelling::find()
+            ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
+            ->sum('on_plastic') ?? 0;
         return $selling + $mix_selling;
     }
 

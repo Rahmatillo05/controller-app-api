@@ -79,7 +79,7 @@ class Statistics extends \yii\db\ActiveRecord
         return (new StatisticsDetail())->saved($this->id);
     }
 
-    public function totalSpent()
+    private function totalSpent()
     {
 
     }
