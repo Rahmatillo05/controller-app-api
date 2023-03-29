@@ -85,7 +85,7 @@ class Statistics extends \yii\db\ActiveRecord
 
         return Product::find()
             ->select(['SUM(purchase_price * all_amount) as total'])
-            ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
+            ->where(['between', 'updated_at', $lastDayUnix, $lastDayUnix + 86399])
             ->scalar();
     }
 
