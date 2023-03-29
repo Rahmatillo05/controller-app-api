@@ -18,7 +18,7 @@ class StatisticsController extends BaseController
         return $actions;
     }
 
-    public function actionCreate()
+    public function actionCreate(): bool
     {
         return (new Statistics())->saved();
     }
