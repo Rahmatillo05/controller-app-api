@@ -51,13 +51,21 @@ class Statistics extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * Gets query for [[StatisticsDetails]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getStatisticsDetails()
+    public function fields()
     {
-        return $this->hasMany(StatisticsDetail::class, ['period_id' => 'id']);
+        return [
+            'period',
+            'total_spent',
+            'total_benefit',
+            'pure_benefit',
+            'detail' => function () {
+                return $this->getDetail();
+            }
+        ];
+    }
+
+    public function getDetail(): ?StatisticsDetail
+    {
+        return StatisticsDetail::findOne(['period_id' => $this->id]);
     }
 }
