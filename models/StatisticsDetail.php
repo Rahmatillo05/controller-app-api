@@ -88,7 +88,7 @@ class StatisticsDetail extends \yii\db\ActiveRecord
     {
         $lastDayUnix = strtotime('yesterday');
         $selling = Selling::find()
-            ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
+            ->where(['between', 'updated_at', $lastDayUnix, $lastDayUnix + 86399])
             ->andWhere(['type_pay' => Selling::PAY_CASH])
             ->sum('sell_price') ?? 0;
         $mix_selling = MixSelling::find()
