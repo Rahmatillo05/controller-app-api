@@ -10,7 +10,9 @@ use yii\data\ActiveDataProvider;
 class StatisticsController extends BaseController
 {
     public $modelClass = Statistics::class;
-
+    public $serializer = [
+        'class' => 'yii\rest\Serializer',
+    ];
     public function actions(): array
     {
         $actions = parent::actions();
@@ -22,13 +24,14 @@ class StatisticsController extends BaseController
 
     public function data(): ActiveDataProvider
     {
-        $monthNumber = Yii::$app->request->get('month');
+        $monthNumber = Yii::$app->request->get('month') ?? date('m');
         $query = Statistics::find();
         if ($monthNumber) {
             $query->where(['MONTH(period)' => $monthNumber]);
         }
         return new ActiveDataProvider([
-            'query' => $query
+            'query' => $query,
+            'pagination' => false
         ]);
 
     }
