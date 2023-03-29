@@ -68,11 +68,16 @@ class StatisticsDetail extends \yii\db\ActiveRecord
         return $this->hasOne(Statistics::class, ['id' => 'period_id']);
     }
 
-    public function saved()
+    public function saved($period_id): bool
     {
+        $this->period_id = $period_id;
         $this->product_sum = $this->productSum();
         $this->on_cash = $this->onCash();
         $this->on_plastic = $this->onPlastic();
+        $this->on_debt = $this->onDebt();
+        $this->other_spent = $this->otherSpent();
+        $this->plastic_percent = $this->plasticPercent();
+        return $this->save();
     }
 
     private function productSum()
@@ -95,7 +100,15 @@ class StatisticsDetail extends \yii\db\ActiveRecord
         $mix_selling = MixSelling::find()
             ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
             ->sum('on_cash') ?? 0;
-        return $selling + $mix_selling;
+        $payHistory = PaymentHistoryList::find()
+            ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
+            ->andWhere(['type_pay' => PaymentHistoryList::PAY_CASH])
+            ->sum('pay_amount') ?? 0;
+        $debtInstantPay = DebtHistory::find()
+            ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
+            ->andWhere(['type_pay' => DebtHistory::PAY_CASH])
+            ->sum('pay_amount') ?? 0;
+        return $selling + $mix_selling + $payHistory + $debtInstantPay;
     }
 
     private function onPlastic()
@@ -108,7 +121,48 @@ class StatisticsDetail extends \yii\db\ActiveRecord
         $mix_selling = MixSelling::find()
             ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
             ->sum('on_plastic') ?? 0;
-        return $selling + $mix_selling;
+        $payHistory = PaymentHistoryList::find()
+            ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
+            ->andWhere(['type_pay' => PaymentHistoryList::PAY_ONLINE])
+            ->sum('pay_amount') ?? 0;
+        $debtInstantPay = DebtHistory::find()
+            ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
+            ->andWhere(['type_pay' => DebtHistory::PAY_ONLINE])
+            ->sum('pay_amount') ?? 0;
+        return $selling + $mix_selling + $payHistory + $debtInstantPay;
     }
+
+    private function onDebt()
+    {
+        $lastDayUnix = strtotime('yesterday');
+        return Selling::find()
+            ->where(['between', 'updated_at', $lastDayUnix, $lastDayUnix + 86399])
+            ->andWhere(['type_pay' => Selling::PAY_DEBT])
+            ->sum('sell_price') ?? 0;
+    }
+
+    private function otherSpent()
+    {
+        $lastDayUnix = strtotime('yesterday');
+        return OtherSpent::find()
+            ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
+            ->sum('sum') ?? 0;
+    }
+
+    private function plasticPercent()
+    {
+        $tax_amount = (PlasticCardTax::find()->orderBy(['id' => SORT_DESC])->one())->tax_amount;
+        return $this->onPlastic() * ($tax_amount / 100);
+    }
+    public function getPlastic()
+    {
+        return $this->plasticPercent();
+    }
+
+    public function getSelling()
+    {
+        return $this->onPlastic() + $this->onCash();
+    }
+
 
 }

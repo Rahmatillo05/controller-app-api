@@ -74,7 +74,8 @@ class PlasticCardTax extends \yii\db\ActiveRecord
         $selling = Selling::find()->where(['type_pay' => Selling::PAY_ONLINE])->sum('sell_price') ?? 0;
         $taxAmount = self::find()->orderBy(['id' => SORT_DESC])->one();
         $debtInstantPayment = DebtHistory::find()->where(['type_pay' => DebtHistory::PAY_ONLINE])->sum('pay_amount') ?? 0;
-        $plasticPay = $mixSelling + $selling + $debtInstantPayment;
+        $payHistory = PaymentHistoryList::find()->where(['type_pay' => PaymentHistoryList::PAY_ONLINE])->sum('pay_amount') ?? 0;
+        $plasticPay = $mixSelling + $selling + $debtInstantPayment + $payHistory;
         return $plasticPay * ($taxAmount->tax_amount / 100);
     }
 }
