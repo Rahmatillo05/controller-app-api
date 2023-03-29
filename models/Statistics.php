@@ -84,7 +84,7 @@ class Statistics extends \yii\db\ActiveRecord
         $lastDayUnix = strtotime('yesterday');
 
         return Product::find()
-            ->select(['SUM(purchase_price) as total'])
+            ->select(['SUM(purchase_price * all_amount) as total'])
             ->where(['between', 'updated_at', $lastDayUnix, $lastDayUnix + 86399])
             ->scalar();
     }
