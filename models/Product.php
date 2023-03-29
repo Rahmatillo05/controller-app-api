@@ -82,7 +82,9 @@ class Product extends \yii\db\ActiveRecord
             'purchase_price',
             'wholesale_price',
             'retail_price',
-            'created_at'
+            'created_at' => function () {
+                return $this->updated_at;
+            }
         ];
     }
 
