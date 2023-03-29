@@ -16,7 +16,8 @@ class m230319_152826_create_mix_selling_table extends Migration
             'id' => $this->primaryKey(),
             'selling_ids'=> $this->string()->notNull(),
             'on_cash' => $this->integer()->notNull(),
-            'on_plastic' => $this->integer()->notNull()
+            'on_plastic' => $this->integer()->notNull(),
+            'created_at' => $this->integer()
         ]);
     }
 

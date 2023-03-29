@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Statistics;
+use app\models\StatisticsDetail;
 
 class StatisticsController extends BaseController
 {
@@ -19,7 +20,7 @@ class StatisticsController extends BaseController
 
     public function actionCreate()
     {
-        return (new Statistics())->totalSpent();
+        return (new StatisticsDetail())->onCash();
     }
 
 }

@@ -81,12 +81,7 @@ class Statistics extends \yii\db\ActiveRecord
 
     public function totalSpent()
     {
-        $lastDayUnix = strtotime('yesterday');
 
-        return Product::find()
-            ->select(['SUM(purchase_price * all_amount) as total'])
-            ->where(['between', 'updated_at', $lastDayUnix, $lastDayUnix + 86399])
-            ->scalar();
     }
 
     private function totalBenefit()

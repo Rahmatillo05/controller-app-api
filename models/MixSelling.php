@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "mix_selling".
@@ -11,6 +13,7 @@ use Yii;
  * @property string $selling_ids
  * @property int $on_cash
  * @property int $on_plastic
+ * @property int $created_at
  */
 class MixSelling extends \yii\db\ActiveRecord
 {
@@ -22,6 +25,16 @@ class MixSelling extends \yii\db\ActiveRecord
         return 'mix_selling';
     }
 
+    public function behaviors()
+    {
+        return[
+            [
+                'class' => TimestampBehavior::class,
+                'updatedAtAttribute' => false
+            ]
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -29,7 +42,7 @@ class MixSelling extends \yii\db\ActiveRecord
     {
         return [
             [['selling_ids', 'on_cash', 'on_plastic'], 'required'],
-            [['on_cash', 'on_plastic'], 'integer'],
+            [['on_cash', 'on_plastic' ,'created_at'], 'integer'],
             [['selling_ids'], 'string', 'max' => 255],
         ];
     }

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "statistics_detail".
@@ -60,14 +61,40 @@ class StatisticsDetail extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Period]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getPeriod()
+    public function getPeriod(): ActiveQuery
     {
         return $this->hasOne(Statistics::class, ['id' => 'period_id']);
     }
 
     public function saved()
     {
+        $this->product_sum = $this->productSum();
+        $this->on_cash = $this->onCash();
     }
+
+    private function productSum()
+    {
+        $lastDayUnix = strtotime('yesterday');
+
+        return Product::find()
+            ->select(['SUM(purchase_price * all_amount) as total'])
+            ->where(['between', 'updated_at', $lastDayUnix, $lastDayUnix + 86399])
+            ->scalar() ?? 0;
+    }
+
+    public function onCash()
+    {
+        $lastDayUnix = strtotime('yesterday');
+        $selling = Selling::find()->select(['SUM(sell_price) as total'])
+            ->andWhere(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
+            ->andWhere(['type_pay' => Selling::PAY_CASH])
+            ->scalar() ?? 0;
+        $mix_selling = MixSelling::find()->select(['SUM(on_cash) as total'])
+        ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
+        ->scalar() ?? 0;
+        return $selling + $mix_selling;
+    }
+
 }

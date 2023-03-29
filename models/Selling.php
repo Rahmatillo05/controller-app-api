@@ -172,7 +172,7 @@ class Selling extends \yii\db\ActiveRecord
     /**
      * @throws ServerErrorHttpException
      */
-    public function saveWithoutDebtor($sellingList, $debtorData, $total_debt, $instant_payment, $type_pay)
+    public function saveWithoutDebtor($sellingList, $debtorData, $total_debt, $instant_payment, $type_pay): bool
     {
        if( $selling_id = $this->saveThis($sellingList, $type_pay)){
            $debtor = Debtor::findOne($debtorData['id']);
