@@ -66,4 +66,8 @@ class StatisticsDetail extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Statistics::class, ['id' => 'period_id']);
     }
+
+    public function saved()
+    {
+    }
 }

@@ -19,7 +19,7 @@ class StatisticsController extends BaseController
 
     public function actionCreate()
     {
-        return "Save";
+        return (new Statistics())->totalSpent();
     }
 
 }

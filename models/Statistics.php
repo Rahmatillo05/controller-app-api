@@ -68,4 +68,28 @@ class Statistics extends \yii\db\ActiveRecord
     {
         return StatisticsDetail::findOne(['period_id' => $this->id]);
     }
+
+    public function saved(): bool
+    {
+        $this->total_spent = $this->totalSpent();
+        $this->total_benefit = $this->totalBenefit();
+        $this->pure_benefit = $this->total_benefit - $this->total_spent;
+        $this->period = date('Y-m-d H:i');
+        $this->save();
+        return (new StatisticsDetail())->saved($this->id);
+    }
+
+    public function totalSpent()
+    {
+        $lastDayUnix = time() - 86400;
+        return Product::find()
+            ->select(['SUM(purchase_price) as total'])
+            ->where(['created_at' => date('Y-m-d', $lastDayUnix)])
+            ->scalar();
+    }
+
+    private function totalBenefit()
+    {
+
+    }
 }
