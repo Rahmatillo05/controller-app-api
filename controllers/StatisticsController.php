@@ -20,7 +20,7 @@ class StatisticsController extends BaseController
         return $actions;
     }
 
-    public function data()
+    public function data(): ActiveDataProvider
     {
         $monthNumber = Yii::$app->request->get('month');
         $query = Statistics::find();
