@@ -87,13 +87,13 @@ class StatisticsDetail extends \yii\db\ActiveRecord
     public function onCash()
     {
         $lastDayUnix = strtotime('yesterday');
-        $selling = Selling::find()->select(['SUM(sell_price) as total'])
+        $selling = Selling::find()
             ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
             ->andWhere(['type_pay' => Selling::PAY_CASH])
-            ->scalar() ?? 0;
-        $mix_selling = MixSelling::find()->select(['SUM(on_cash) as total'])
+            ->sum('sell_price') ?? 0;
+        $mix_selling = MixSelling::find()
             ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
-            ->scalar() ?? 0;
+            ->sum('on_cash') ?? 0;
         return $selling + $mix_selling;
     }
 
