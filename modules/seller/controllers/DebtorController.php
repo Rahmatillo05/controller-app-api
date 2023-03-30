@@ -6,6 +6,7 @@ use app\models\DebtHistory;
 use app\models\Debtor;
 use app\models\OldDebt;
 use app\models\PaymentHistoryList;
+use yii\data\ActiveDataProvider;
 use yii\web\MethodNotAllowedHttpException;
 use yii\web\NotFoundHttpException;
 
@@ -19,8 +20,16 @@ class DebtorController extends \app\controllers\BaseController
 
         unset($actions['create']);
         unset($actions['view']);
-
+        $actions['index']['prepareDataProvider'] = [$this, 'data'];
         return $actions;
+    }
+
+    public function data()
+    {
+        return new ActiveDataProvider([
+            'query' => Debtor::find(),
+            'pagination' => false
+        ]);
     }
 
     public function actionCreate()
@@ -65,6 +74,7 @@ class DebtorController extends \app\controllers\BaseController
             throw new MethodNotAllowedHttpException();
         }
     }
+
     public function actionAddDebt()
     {
         $model = new OldDebt();
@@ -76,6 +86,7 @@ class DebtorController extends \app\controllers\BaseController
             throw new MethodNotAllowedHttpException();
         }
     }
+
     private function findModel($id): ?Debtor
     {
         if ($id != null) {
