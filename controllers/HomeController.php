@@ -28,7 +28,7 @@ class HomeController extends Controller
         $data['selling_sum'] = Selling::find()->sum('sell_price') ?? 0;
         $data['plastic_card'] = round((new PlasticCardTax())->calcSum(), 1);
         $data['last_week_statistics'] = Statistics::find()
-            ->where(['MONTH(date)' => date('m')])
+            ->where(['MONTH(period)' => date('m')])
             ->all();;
 
         return $data;
