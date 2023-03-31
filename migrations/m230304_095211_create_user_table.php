@@ -38,14 +38,14 @@ class m230304_095211_create_user_table extends Migration
 			'updated_at' => time(),
 		]);
 		$this->insert('user', [
-			'first_name' => 'seller',
-			'last_name' => 'seller',
-			'username' => 'seller',
-			'address' => 'seller',
-			'password' => Yii::$app->security->generatePasswordHash('seller'),
+			'first_name' => 'admin2',
+			'last_name' => 'admin2',
+			'username' => 'admin2',
+			'address' => 'admin2',
+			'password' => Yii::$app->security->generatePasswordHash('admin2'),
 			'auth_key' => Yii::$app->security->generateRandomString(15),
 			'phone_number' => "+998999999999",
-            'user_role' => 0,
+            'user_role' => 10,
 			'created_at' => time(),
 			'updated_at' => time(),
 		]);
