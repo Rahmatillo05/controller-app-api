@@ -126,4 +126,12 @@ class Product extends \yii\db\ActiveRecord
         $productAmount = ProductAmount::findOne($this->id);
         return $productAmount->remaining_product;
     }
+
+    public function summ()
+    {
+        return Product::find()
+            ->select(['SUM(p.purchase_price * pa.has_came_product) AS total_amount'])
+            ->innerJoin('product_amount pa', 'p.id = pa.product_id')
+            ->scalar();
+    }
 }

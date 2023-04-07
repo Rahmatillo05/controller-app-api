@@ -30,7 +30,7 @@ class StatisticsController extends BaseController
             $query->where(['MONTH(period)' => $monthNumber]);
         }
         return new ActiveDataProvider([
-            'query' => $query,
+            'query' => $query->orderBy(['id' => SORT_DESC]),
             'pagination' => false
         ]);
 

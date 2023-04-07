@@ -23,13 +23,13 @@ class HomeController extends Controller
     }
     public function actionIndex()
     {
-        $data['product_sum'] = Product::find()->sum('purchase_price') ?? 0;
+        $data['product_sum'] = (new Product())->summ() ?? 0;
         $data['other_spent'] = OtherSpent::find()->sum('sum') ?? 0;
         $data['selling_sum'] = Selling::find()->sum('sell_price') ?? 0;
         $data['plastic_card'] = round((new PlasticCardTax())->calcSum(), 1);
         $data['last_week_statistics'] = Statistics::find()
-            ->where(['MONTH(period)' => date('m')])
-            ->all();;
+            ->where(['MONTH(period)' => date('m')])->orderBy(['id' => SORT_DESC])
+            ->all();
 
         return $data;
     }
