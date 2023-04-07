@@ -181,7 +181,6 @@ class Selling extends \yii\db\ActiveRecord
            return true;
        }
         throw new ServerErrorHttpException("Saqlashda xatolik bor!");
-
     }
 
     public function createDebtHistory($debtor, $total_debt, $instant_payment, $type_pay): int
