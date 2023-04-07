@@ -130,8 +130,8 @@ class Product extends \yii\db\ActiveRecord
     public function summ()
     {
         $query = Product::find()
-            ->select(['product.purchase_price * pa.has_came_product AS total_amount'])
-            ->innerJoin('product_amount pa', 'product.id = pa.product_id');
-        return $query->select['total_amount'];
+            ->select(['SUM(product.purchase_price * pa.has_came_product) AS total_amount'])
+            ->innerJoin('product_amount pa', 'product.id = pa.product_id')->scalar();
+        return $query;
     }
 }
