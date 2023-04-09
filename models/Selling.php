@@ -143,8 +143,9 @@ class Selling extends \yii\db\ActiveRecord
     /**
      * @throws ServerErrorHttpException
      */
-    public function saveWithDebtor($sellingList, $debtorData, $total_debt, $instant_payment, $type_pay): bool
+    public function saveWithDebtor($sellingList, $debtorData, $total_debt, $instant_payment): bool
     {
+        $type_pay = self::PAY_DEBT;
         if ($selling_id = $this->saveThis($sellingList, $type_pay)) {
             $debtor_id = $this->createDebtor($debtorData);
             $debt_history_id = $this->createDebtHistory($debtor_id, $total_debt, $instant_payment, $type_pay);
@@ -172,14 +173,15 @@ class Selling extends \yii\db\ActiveRecord
     /**
      * @throws ServerErrorHttpException
      */
-    public function saveWithoutDebtor($sellingList, $debtorData, $total_debt, $instant_payment, $type_pay): bool
+    public function saveWithoutDebtor($sellingList, $debtorData, $total_debt, $instant_payment): bool
     {
-       if( $selling_id = $this->saveThis($sellingList, $type_pay)){
-           $debtor = Debtor::findOne($debtorData['id']);
-           $debt_history_id = $this->createDebtHistory($debtor->id, $total_debt, $instant_payment, $type_pay);
-           $this->createDebtHistoryList($debt_history_id, $selling_id);
-           return true;
-       }
+        $type_pay = self::PAY_DEBT;
+        if ($selling_id = $this->saveThis($sellingList, $type_pay)) {
+            $debtor = Debtor::findOne($debtorData['id']);
+            $debt_history_id = $this->createDebtHistory($debtor->id, $total_debt, $instant_payment, $type_pay);
+            $this->createDebtHistoryList($debt_history_id, $selling_id);
+            return true;
+        }
         throw new ServerErrorHttpException("Saqlashda xatolik bor!");
     }
 
