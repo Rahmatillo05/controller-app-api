@@ -27,7 +27,7 @@ class HomeController extends Controller
         $data['product_sum'] = StatisticsDetail::find()->sum('product_sum') ?? 0;
         $data['other_spent'] = OtherSpent::find()->sum('sum') ?? 0;
         $data['selling_sum'] = Selling::find()->sum('sell_price') ?? 0;
-        $data['plastic_card'] = round((new PlasticCardTax())->calcSum(), 1);
+        $data['plastic_card'] = round(StatisticsDetail::find()->sum('plastic_percent'), 1);
         $data['last_week_statistics'] = Statistics::find()
             ->where(['MONTH(period)' => date('m')])->orderBy(['id' => SORT_DESC])
             ->all();
