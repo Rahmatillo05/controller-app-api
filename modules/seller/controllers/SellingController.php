@@ -52,9 +52,9 @@ class SellingController extends BaseController
             $isCreate = $this->request->post('isCreate');
             $type_pay = Selling::PAY_DEBT;
             if ($isCreate) {
-                return $model->saveWithDebtor($sellingList, $debtorData, $total_debt, $instant_payment, $instant_payment_type, $type_pay);
+                return $model->saveWithDebtor($sellingList, $debtorData, $total_debt, $instant_payment, $instant_payment_type);
             }
-            return $model->saveWithoutDebtor($sellingList, $debtorData, $total_debt, $instant_payment, $instant_payment_type, $type_pay);
+            return $model->saveWithoutDebtor($sellingList, $debtorData, $total_debt, $instant_payment, $instant_payment_type);
         } else {
             throw new MethodNotAllowedHttpException("Method Not Allowed. This URL can only handle the following request methods: POST.");
         }
