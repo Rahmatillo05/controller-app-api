@@ -81,23 +81,38 @@ class Statistics extends \yii\db\ActiveRecord
 
     private function totalSpent()
     {
-        $lastDayUnix = strtotime('yesterday');
-
-        $product = Product::find()
-            ->select(['SUM(purchase_price * all_amount) as total'])
-            ->where(['between', 'updated_at', $lastDayUnix, $lastDayUnix + 86399])
-            ->scalar() ?? 0;
-        $other_spent = OtherSpent::find()
+        $lastDayUnix = strtotime('today');
+        $sales = Selling::find()
             ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
-            ->sum('sum') ?? 0;
+            ->all();
+        $total_spent = 0;
+        foreach ($sales as $sale) {
+            $total_spent += $this->productSum($sale->product_id, $sale->sell_amount);
+            if ($sale->type_pay == Selling::PAY_DEBT) {
+                $total_spent += $this->debt($sale->id);
+            }
+        }
 
-        return  $other_spent + $product;
+        return $total_spent;
     }
 
     private function totalBenefit()
     {
-        $plastic = (new StatisticsDetail())->getPlastic();
-        return (new StatisticsDetail())->getSelling() - $plastic;
+        return (new StatisticsDetail())->getSelling();
+    }
+
+    private function productSum($product_id, $amount)
+    {
+        $product = Product::findOne($product_id);
+
+        return $product->purchase_price * $amount;
+    }
+
+    public function debt($selling_id)
+    {
+        $debt_history = DebtHistoryList::findOne(['selling_id' => $selling_id]);
+
+        return $debt_history->history->debt_amount - $debt_history->history->pay_amount;
     }
 
 

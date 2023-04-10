@@ -80,21 +80,21 @@ class StatisticsDetail extends \yii\db\ActiveRecord
         return $this->save();
     }
 
-    private function productSum()
+    public function productSum()
     {
-        $lastDayUnix = strtotime('yesterday');
+        $lastDayUnix = strtotime('today');
 
         return Product::find()
-            ->select(['SUM(purchase_price * all_amount) as total'])
-            ->where(['between', 'updated_at', $lastDayUnix, $lastDayUnix + 86399])
+            ->select(['SUM(all_amount * purchase_price) as total'])
+            ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
             ->scalar() ?? 0;
     }
 
     private function onCash()
     {
-        $lastDayUnix = strtotime('yesterday');
+        $lastDayUnix = strtotime('today');
         $selling = Selling::find()
-            ->where(['between', 'updated_at', $lastDayUnix, $lastDayUnix + 86399])
+            ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
             ->andWhere(['type_pay' => Selling::PAY_CASH])
             ->sum('sell_price') ?? 0;
         $mix_selling = MixSelling::find()
@@ -113,9 +113,9 @@ class StatisticsDetail extends \yii\db\ActiveRecord
 
     private function onPlastic()
     {
-        $lastDayUnix = strtotime('yesterday');
+        $lastDayUnix = strtotime('today');
         $selling = Selling::find()
-            ->where(['between', 'updated_at', $lastDayUnix, $lastDayUnix + 86399])
+            ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
             ->andWhere(['type_pay' => Selling::PAY_ONLINE])
             ->sum('sell_price') ?? 0;
         $mix_selling = MixSelling::find()
@@ -134,16 +134,16 @@ class StatisticsDetail extends \yii\db\ActiveRecord
 
     private function onDebt()
     {
-        $lastDayUnix = strtotime('yesterday');
+        $lastDayUnix = strtotime('today');
         return Selling::find()
-            ->where(['between', 'updated_at', $lastDayUnix, $lastDayUnix + 86399])
+            ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
             ->andWhere(['type_pay' => Selling::PAY_DEBT])
             ->sum('sell_price') ?? 0;
     }
 
     private function otherSpent()
     {
-        $lastDayUnix = strtotime('yesterday');
+        $lastDayUnix = strtotime('today');
         return OtherSpent::find()
             ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
             ->sum('sum') ?? 0;
@@ -154,6 +154,7 @@ class StatisticsDetail extends \yii\db\ActiveRecord
         $tax_amount = (PlasticCardTax::find()->orderBy(['id' => SORT_DESC])->one())->tax_amount;
         return $this->onPlastic() * ($tax_amount / 100);
     }
+
     public function getPlastic()
     {
         return $this->plasticPercent();
@@ -161,8 +162,11 @@ class StatisticsDetail extends \yii\db\ActiveRecord
 
     public function getSelling()
     {
-        return $this->onPlastic() + $this->onCash();
+        $lastDayUnix = strtotime('today');
+        return Selling::find()
+            ->select(['SUM(sell_price) as total'])
+            ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
+            ->scalar() ?? 0;
     }
-
 
 }

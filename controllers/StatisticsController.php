@@ -13,6 +13,7 @@ class StatisticsController extends BaseController
     public $serializer = [
         'class' => 'yii\rest\Serializer',
     ];
+
     public function actions(): array
     {
         $actions = parent::actions();
