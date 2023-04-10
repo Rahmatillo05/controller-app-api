@@ -82,12 +82,10 @@ class StatisticsDetail extends \yii\db\ActiveRecord
 
     public function productSum()
     {
-        $lastDayUnix = strtotime('today');
+        $benefit = (new Statistics())->pureBenefit();
+        $benefit -= $this->otherSpent() + $this->plasticPercent();
 
-        return Product::find()
-            ->select(['SUM(all_amount * purchase_price) as total'])
-            ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
-            ->scalar() ?? 0;
+        return $benefit;
     }
 
     private function onCash()

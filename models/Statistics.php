@@ -115,5 +115,10 @@ class Statistics extends \yii\db\ActiveRecord
         return $debt_history->history->debt_amount - $debt_history->history->pay_amount;
     }
 
+    public function pureBenefit()
+    {
+        return $this->totalBenefit() - $this->totalSpent();
+    }
+
 
 }
