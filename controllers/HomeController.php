@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\OldDebt;
 use app\models\OtherSpent;
 use app\models\PlasticCardTax;
 use app\models\Product;
@@ -24,7 +25,9 @@ class HomeController extends Controller
     }
     public function actionIndex()
     {
-        $data['product_sum'] = StatisticsDetail::find()->sum('product_sum') ?? 0;
+        $all_sum = Product::find()->select(['SUM(all_amount * purchase_price) AS total_amount'])->scalar();
+        $all_sum += OldDebt::find()->sum('amount');
+        $data['product_sum'] = $all_sum;
         $data['other_spent'] = OtherSpent::find()->sum('sum') ?? 0;
         $data['selling_sum'] = Selling::find()->sum('sell_price') ?? 0;
         $data['plastic_card'] = round(StatisticsDetail::find()->sum('plastic_percent'), 1);
