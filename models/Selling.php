@@ -122,6 +122,7 @@ class Selling extends \yii\db\ActiveRecord
      */
     public function soldOnCash(array $products, $type_pay): bool
     {
+        $type_pay = self::PAY_CASH;
         if ($this->saveThis($products, $type_pay)) {
             return true;
         }
@@ -133,6 +134,7 @@ class Selling extends \yii\db\ActiveRecord
      */
     public function mixedSold(array $products, $type_pay, $on_cash, $on_plastic): bool
     {
+        $type_pay = self::MIX_PAY;
         $mixSelling = new MixSelling();
         if ($ids = $this->saveThis($products, $type_pay)) {
             return $mixSelling->saved($ids, $on_cash, $on_plastic);
