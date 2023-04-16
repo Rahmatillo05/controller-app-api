@@ -60,13 +60,14 @@ class MixSelling extends \yii\db\ActiveRecord
         ];
     }
 
-    public function saved($selling_ids, $on_cash, $on_plastic): bool
+    public function saved($selling_ids, $on_cash, $on_plastic)
     {
+        $model = new $this;
         $ids = trim(implode(',', $selling_ids), ',');
-        $this->selling_ids = $ids;
-        $this->on_cash = $on_cash;
-        $this->on_plastic = $on_plastic;
+        $model->selling_ids = $ids;
+        $model->on_cash = $on_cash;
+        $model->on_plastic = $on_plastic;
 
-        return $this->save();
+        return $model->save() ? true : $model->errors;
     }
 }
