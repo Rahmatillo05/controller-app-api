@@ -108,7 +108,7 @@ class Statistics extends \yii\db\ActiveRecord
         return $product->purchase_price * $amount;
     }
 
-    public function debt($selling_id)
+    public function debt($selling_id): ?int
     {
         $debt_history = DebtHistoryList::findOne(['selling_id' => $selling_id]);
 
