@@ -29,7 +29,7 @@ class SellingController extends BaseController
             $on_cash = $this->request->post('on_cash');
             $on_plastic = $this->request->post('on_plastic');
             if ($type_pay === Selling::MIX_PAY) {
-                return $model->mixedSold($productList, $type_pay, $on_cash, $on_plastic);
+                return $model->mixedSold($productList,  $on_cash, $on_plastic);
             }
             return $model->soldOnCash($productList, $type_pay);
         }

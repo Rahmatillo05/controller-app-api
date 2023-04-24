@@ -72,8 +72,8 @@ class Statistics extends \yii\db\ActiveRecord
     public function saved(): bool
     {
         $this->total_spent = $this->totalSpent(); #kirim
-        $this->total_benefit = $this->totalBenefit(); # Sotilgan mahsulot summasi
-        $this->pure_benefit = $this->total_benefit - $this->total_spent; # Foyda
+        $this->total_benefit = $this->totalBenefit(); #Sotilgan mahsulot summasi
+        $this->pure_benefit = $this->total_benefit - $this->total_spent; #Foyda
         $this->period = date('Y-m-d H:i');
         $this->save();
         return (new StatisticsDetail())->saved($this->id);
