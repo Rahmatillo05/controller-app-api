@@ -71,12 +71,12 @@ class StatisticsDetail extends \yii\db\ActiveRecord
     public function saved($period_id): bool
     {
         $this->period_id = $period_id;
-        $this->product_sum = $this->productSum();
-        $this->on_cash = $this->onCash();
-        $this->on_plastic = $this->onPlastic();
-        $this->on_debt = $this->onDebt();
-        $this->other_spent = $this->otherSpent();
-        $this->plastic_percent = $this->plasticPercent();
+        $this->on_cash = $this->onCash(); # Kunlik naqd pul summasi
+        $this->on_plastic = $this->onPlastic(); # Kunlik plastic pul summasi
+        $this->on_debt = $this->onDebt(); # Kunlik qarz summasi
+        $this->other_spent = $this->otherSpent(); # Boshqa harajatlarga ketgan summa
+        $this->plastic_percent = $this->plasticPercent(); # Plastic ushlab qolyotgan summa
+        $this->product_sum = $this->productSum(); # sof foyda
         return $this->save();
     }
 
@@ -133,10 +133,9 @@ class StatisticsDetail extends \yii\db\ActiveRecord
     private function onDebt()
     {
         $lastDayUnix = strtotime('today');
-        return Selling::find()
+        return DebtHistory::find()->select(['SUM(debt_amount - pay_amount) as total'])
             ->where(['between', 'created_at', $lastDayUnix, $lastDayUnix + 86399])
-            ->andWhere(['type_pay' => Selling::PAY_DEBT])
-            ->sum('sell_price') ?? 0;
+            ->scalar() ?? 0;
     }
 
     private function otherSpent()
