@@ -56,7 +56,7 @@ class AdminLoginForm extends Model
 
     /**
      * Logs in a user using the provided username and password.
-     * @return false whether the user is logged in successfully
+     * @return array | bool whether the user is logged in successfully
      * @throws Exception
      */
     public function login()

@@ -12,9 +12,7 @@ class OtherSpentController extends BaseController
 
     public function actionPlasticCardTax()
     {
-        $model = PlasticCardTax::find()->orderBy(['id' => SORT_DESC])->one();
-
-        return $model;
+        return PlasticCardTax::find()->orderBy(['id' => SORT_DESC])->one();
     }
 
     public function actionPlasticCardTaxUpdate($id)

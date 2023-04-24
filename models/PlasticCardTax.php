@@ -61,7 +61,7 @@ class PlasticCardTax extends \yii\db\ActiveRecord
         return [
             'id',
             'tax_amount' => function () {
-                return number_format($this->tax_amount, '0', '.', '');
+                return round($this->tax_amount, 1);
             },
             'created_at',
             'updated_at'
