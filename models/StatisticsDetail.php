@@ -83,7 +83,7 @@ class StatisticsDetail extends \yii\db\ActiveRecord
     public function productSum()
     {
         $benefit = (new Statistics())->pureBenefit();
-        $benefit -= $this->otherSpent() + $this->plasticPercent();
+        $benefit -= ($this->otherSpent() + $this->plasticPercent());
 
         return $benefit;
     }
