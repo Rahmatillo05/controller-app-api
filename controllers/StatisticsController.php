@@ -39,6 +39,7 @@ class StatisticsController extends BaseController
 
     public function actionCreate(): bool
     {
+
         return (new Statistics())->saved();
     }
 
