@@ -31,9 +31,7 @@ class ProductController extends BaseController
     {
         return new ActiveDataProvider([
             'query' => Product::find()->orderBy(['id' => SORT_DESC]),
-            'pagination' => [
-                'pageSize' => 30
-            ]
+            'pagination' => false
         ]);
     }
     /**
