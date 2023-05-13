@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Product;
 use app\models\ProductAmount;
 use app\models\Selling;
+use yii\data\ActiveDataProvider;
 use yii\web\MethodNotAllowedHttpException;
 use yii\web\NotFoundHttpException;
 
@@ -23,10 +24,18 @@ class ProductController extends BaseController
         $actions = parent::actions();
 
         unset($actions['create'], $actions['view'], $actions['update']);
-
+        $actions['index']['prepareDataProvider'] = [$this, 'data'];
         return $actions;
     }
-
+    public function data()
+    {
+        return new ActiveDataProvider([
+            'query' => Product::find()->orderBy(['id' => SORT_DESC]),
+            'pagination' => [
+                'pageSize' => 30
+            ]
+        ]);
+    }
     /**
      * @return Product|array
      * @throws MethodNotAllowedHttpException
