@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 use app\models\Statistics;
-use app\models\StatisticsDetail;
 use Yii;
 use yii\data\ActiveDataProvider;
 

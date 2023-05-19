@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 
 /**
