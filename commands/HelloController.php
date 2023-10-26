@@ -25,10 +25,9 @@ class HelloController extends Controller
      * @param string $message the message to be echoed.
      * @return int Exit code
      */
-    public function actionIndex($message = 'hello world')
+    public function actionIndex(string $message = 'hello world')
     {
-        echo $message . "\n";
+        print_r(env("DB_CONNECTION"));
 
-        return ExitCode::OK;
     }
 }
