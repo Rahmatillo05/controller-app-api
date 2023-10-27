@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "category".
@@ -23,11 +24,11 @@ class Category extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'category';
     }
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
           [
@@ -40,11 +41,12 @@ class Category extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['category_name'], 'required'],
-            [['unit', 'created_at'], 'integer'],
+            [['unit', 'created_at', 'unit_id'], 'integer'],
+            [['unit_id'], 'exist', 'skipOnError' => true, 'targetClass' => Unit::class, 'targetAttribute' => ['unit_id' => 'id']],
             [['category_name'], 'string', 'max' => 255],
         ];
     }
@@ -52,7 +54,7 @@ class Category extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -65,10 +67,19 @@ class Category extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Products]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getProducts()
+    public function getProducts(): ActiveQuery
     {
         return $this->hasMany(Product::class, ['category_id' => 'id']);
+    }
+
+    public function getUnit(): ActiveQuery
+    {
+        return $this->hasOne(Unit::class, ['id' => 'unit_id']);
+    }
+    public function getStorageProducts(): ActiveQuery
+    {
+        return $this->hasMany(StorageProduct::class, ['product_id' => 'id']);
     }
 }

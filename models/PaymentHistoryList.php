@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "payment_history_list".
@@ -76,9 +77,9 @@ class PaymentHistoryList extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Debtor]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getDebtor()
+    public function getDebtor(): ActiveQuery
     {
         return $this->hasOne(Debtor::class, ['id' => 'debtor_id']);
     }

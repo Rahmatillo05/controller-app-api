@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\ArrayHelper;
 use yii\web\ServerErrorHttpException;
 
 /**
@@ -25,44 +26,29 @@ use yii\web\ServerErrorHttpException;
  * @property Product $product
  * @property User $worker
  */
-class Selling extends \yii\db\ActiveRecord
+class Selling extends BaseModel
 {
-    const TYPE_RETAIL = 0; # Optom
-    const TYPE_GOOD = 10; # Chakana
-    const PAY_ONLINE = 0; # Plastikka
-    const PAY_DEBT = 5; # Qarzga
-    const PAY_CASH = 10; # Naqd pulga
-    const MIX_PAY = 15; # Plastic va naqd shakldagi to'lo'v
-    /**
-     * @var mixed|null
-     */
-
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'selling';
     }
 
-    public function behaviors()
+    public function behaviors(): array
     {
-        return [
-            [
-                'class' => TimestampBehavior::class,
-            ],
-            [
-                'class' => BlameableBehavior::class,
-                'updatedByAttribute' => false,
-                'createdByAttribute' => 'worker_id'
-            ]
-        ];
+        return ArrayHelper::merge(parent::behaviors(), [
+            'class' => BlameableBehavior::class,
+            'updatedByAttribute' => false,
+            'createdByAttribute' => 'worker_id'
+        ]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['category_id', 'product_id', 'worker_id', 'sell_price', 'sell_amount', 'type_sell', 'type_pay', 'created_at', 'updated_at'], 'integer'],
@@ -73,7 +59,7 @@ class Selling extends \yii\db\ActiveRecord
         ];
     }
 
-    public function fields()
+    public function fields(): array
     {
         return [
             'id',

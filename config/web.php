@@ -1,7 +1,9 @@
 <?php
 
 use yii\rest\UrlRule;
+use yii\symfonymailer\Mailer;
 use yii\web\JsonParser;
+use yii\web\Response;
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
@@ -29,6 +31,9 @@ $config = [
                 'application/json' => JsonParser::class
             ]
         ],
+        'response' => [
+          'format' => Response::FORMAT_JSON
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
@@ -40,7 +45,7 @@ $config = [
             'errorAction' => 'site/error',
         ],
         'mailer' => [
-            'class' => \yii\symfonymailer\Mailer::class,
+            'class' => Mailer::class,
             'viewPath' => '@app/mail',
             // send all mails to a file by default.
             'useFileTransport' => true,

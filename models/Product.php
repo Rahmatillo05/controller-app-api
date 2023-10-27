@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "product".
@@ -19,7 +20,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int|null $updated_at
  * @property Category $category
  */
-class Product extends \yii\db\ActiveRecord
+class Product extends BaseModel
 {
     /**
      * {@inheritdoc}
@@ -29,25 +30,18 @@ class Product extends \yii\db\ActiveRecord
         return 'product';
     }
 
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => TimestampBehavior::class,
-            ]
-        ];
-    }
-
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['category_id', 'all_amount', 'purchase_price', 'wholesale_price', 'retail_price', 'created_at', 'updated_at'], 'integer'],
+            [['unit_id', 'category_id', 'created_at', 'updated_at'], 'integer'],
             [['product_name', 'all_amount', 'purchase_price', 'wholesale_price', 'retail_price'], 'required'],
             [['product_name'], 'string', 'max' => 200],
+            [['min_amount', 'all_amount', 'purchase_price', 'wholesale_price', 'retail_price'], 'number'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
+            [['unit_id'], 'exist', 'skipOnError' => true, 'targetClass' => Unit::class, 'targetAttribute' => ['unit_id' => 'id']],
         ];
     }
 
@@ -91,17 +85,27 @@ class Product extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Category]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getCategory()
+    public function getCategory(): ActiveQuery
     {
         return $this->hasOne(Category::class, ['id' => 'category_id']);
+    }
+
+    public function getUnit(): ActiveQuery
+    {
+        return $this->hasOne(Unit::class, ['id' => 'unit_id']);
+    }
+
+    public function getStorageProducts(): ActiveQuery
+    {
+        return $this->hasMany(StorageProduct::class, ['product_id' => 'id']);
     }
 
     /**
      * @return bool
      */
-    public function addNewProductAmount()
+    public function addNewProductAmount(): bool
     {
         $product_amount = new ProductAmount();
         $this->save();
@@ -127,10 +131,9 @@ class Product extends \yii\db\ActiveRecord
         return $productAmount->remaining_product;
     }
 
-    public function summ()
+    public function summ(): bool|int|string|null
     {
-        $query = Product::find()
+        return Product::find()
             ->select(['SUM(purchase_price * all_amount) AS total_amount'])->scalar();
-        return $query;
     }
 }

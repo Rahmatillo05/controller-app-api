@@ -12,7 +12,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int|null $created_at
  * @property int|null $updated_at
  */
-class PlasticCardTax extends \yii\db\ActiveRecord
+class PlasticCardTax extends BaseModel
 {
     /**
      * {@inheritdoc}
@@ -20,15 +20,6 @@ class PlasticCardTax extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'plastic_card_tax';
-    }
-
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => TimestampBehavior::class
-            ]
-        ];
     }
 
     /**
