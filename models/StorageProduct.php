@@ -30,7 +30,7 @@ class StorageProduct extends BaseModel
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'storage_product';
     }
@@ -38,9 +38,10 @@ class StorageProduct extends BaseModel
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
+            [['product_list_id'], 'required'],
             [['category_id', 'product_id', 'unit_id', 'status', 'created_at', 'updated_at', 'product_list_id'], 'integer'],
             [['amount', 'price'], 'number'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
@@ -66,6 +67,14 @@ class StorageProduct extends BaseModel
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'product_list_id' => 'Product List ID',
+        ];
+    }
+
+    public function extraFields(): array
+    {
+        return [
+          'productList',
+            'category'
         ];
     }
 

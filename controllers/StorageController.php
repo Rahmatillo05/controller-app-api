@@ -2,57 +2,40 @@
 
 namespace app\controllers;
 
-use app\models\Log;
+use app\models\StorageProduct;
 use app\repositories\StorageRepository;
-use yii\filters\auth\HttpBearerAuth;
-use yii\helpers\Json;
-use yii\rest\Controller;
-use yii\rest\Serializer;
+use yii\base\InvalidConfigException;
+use yii\web\Request;
 
-class StorageController extends Controller
+class StorageController extends CommonController
 {
     protected StorageRepository $storageRepository;
 
     public function init(): void
     {
         parent::init();
-        $this->storageRepository = new StorageRepository();
+        $this->storageRepository = new StorageRepository(new StorageProduct());
     }
-
-    public $serializer = [
-        'class' => Serializer::class,
-        'collectionEnvelope' => 'items',
-    ];
-
-    public function behaviors(): array
-    {
-        $behaviors = parent::behaviors();
-        $behaviors['authenticator'] = [
-            'class' => HttpBearerAuth::class,
-            'except' => ['index', 'view']
-        ];
-
-        return $behaviors;
-    }
-
-    protected function verbs(): array
-    {
-        return [
-            'create' => ['POST'],
-            'delete' => ['DELETE'],
-            'update' => ['PUT'],
-            'index' => ['GET'],
-            'view' => ['GET'],
-        ];
-    }
-
     public function actionIndex()
     {
-        return $this->storageRepository;
+        return $this->storageRepository->searchByCriteria();
     }
 
-    public function actionCreate()
+    /**
+     * @throws InvalidConfigException
+     */
+    public function actionCreate(Request $request)
     {
-        return $this->storageRepository->create();
+        $data = $request->getBodyParams();
+        return $this->storageRepository->create($data);
+    }
+
+    /**
+     * @throws InvalidConfigException
+     */
+    public function actionUpdate(int $id, Request $request)
+    {
+        $data = $request->getBodyParams();
+        return $this->storageRepository->updateOneById($id, $data);
     }
 }

@@ -18,7 +18,8 @@
         "yiisoft/yii2": "~2.0.45",
         "yiisoft/yii2-bootstrap5": "~2.0.2",
         "yiisoft/yii2-symfonymailer": "~2.0.3",
-        "yiithings/yii2-dotenv": "^1.1"
+        "yiithings/yii2-dotenv": "^1.1",
+        "mhndev/yii2-repository": "1.*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
