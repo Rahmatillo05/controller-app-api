@@ -15,7 +15,7 @@ $config = [
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'modules' => [
         'seller' => [
@@ -32,7 +32,7 @@ $config = [
             ]
         ],
         'response' => [
-          'format' => Response::FORMAT_JSON
+            'format' => Response::FORMAT_JSON
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -77,7 +77,8 @@ $config = [
                         'product',
                         'other-spent',
                         'debtor',
-	                    'setting'
+                        'setting',
+                        'storage'
                     ],
                     'pluralize' => false
                 ]

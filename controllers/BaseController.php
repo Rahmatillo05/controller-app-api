@@ -22,10 +22,8 @@ class BaseController extends ActiveController
 
         $behaviors['corsFilter'] = [
             'class' => Cors::class,
-
         ];
 
-        $behaviors['authenticator']['only'] = ['create', 'update', 'delete'];
         $behaviors['authenticator'] = [
             'class' => HttpBearerAuth::class,
         ];
