@@ -2,9 +2,7 @@
 
 namespace app\models;
 
-use Yii;
 use yii\db\ActiveQuery;
-use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "storage_product".
@@ -14,6 +12,7 @@ use yii\db\ActiveRecord;
  * @property int|null $product_id
  * @property int|null $unit_id
  * @property float|null $amount
+ * @property float|null $income_amount
  * @property float|null $price
  * @property int|null $status
  * @property int|null $created_at
@@ -24,6 +23,7 @@ use yii\db\ActiveRecord;
  * @property Product $product
  * @property ProductList $productList
  * @property Unit $unit
+ *
  */
 class StorageProduct extends BaseModel
 {
@@ -43,7 +43,7 @@ class StorageProduct extends BaseModel
         return [
             [['product_list_id'], 'required'],
             [['category_id', 'product_id', 'unit_id', 'status', 'created_at', 'updated_at', 'product_list_id'], 'integer'],
-            [['amount', 'price'], 'number'],
+            [['amount', 'price', 'income_amount'], 'number'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::class, 'targetAttribute' => ['product_id' => 'id']],
             [['product_list_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductList::class, 'targetAttribute' => ['product_list_id' => 'id']],
@@ -54,7 +54,7 @@ class StorageProduct extends BaseModel
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -73,8 +73,11 @@ class StorageProduct extends BaseModel
     public function extraFields(): array
     {
         return [
-          'productList',
-            'category'
+            'productList',
+            'category',
+            'product',
+            'unit',
+            'supplier'
         ];
     }
 
@@ -106,6 +109,11 @@ class StorageProduct extends BaseModel
     public function getProductList(): ActiveQuery
     {
         return $this->hasOne(ProductList::class, ['id' => 'product_list_id']);
+    }
+
+    public function getSupplier(): Supplier
+    {
+        return $this->productList->supplier;
     }
 
     /**

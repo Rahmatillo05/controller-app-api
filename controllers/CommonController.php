@@ -36,6 +36,8 @@ class CommonController extends Controller
             'update' => ['PUT', 'PATCH'],
             'index' => ['GET'],
             'view' => ['GET'],
+            'multi-create' => ['POST'],
+            'accept' => ['POST']
         ];
     }
 

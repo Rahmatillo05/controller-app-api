@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "product_list".
@@ -22,7 +23,7 @@ class ProductList extends BaseModel
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'product_list';
     }
@@ -30,18 +31,17 @@ class ProductList extends BaseModel
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['supplier_id', 'date', 'status', 'created_at', 'updated_at'], 'integer'],
             [['supplier_id'], 'exist', 'skipOnError' => true, 'targetClass' => Supplier::class, 'targetAttribute' => ['supplier_id' => 'id']],
         ];
     }
-
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -53,12 +53,20 @@ class ProductList extends BaseModel
         ];
     }
 
+    public function extraFields(): array
+    {
+        return [
+          'storageProducts',
+          'supplier'
+        ];
+    }
+
     /**
      * Gets query for [[StorageProducts]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getStorageProducts()
+    public function getStorageProducts(): ActiveQuery
     {
         return $this->hasMany(StorageProduct::class, ['product_list_id' => 'id']);
     }
@@ -66,9 +74,9 @@ class ProductList extends BaseModel
     /**
      * Gets query for [[Supplier]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getSupplier()
+    public function getSupplier(): ActiveQuery
     {
         return $this->hasOne(Supplier::class, ['id' => 'supplier_id']);
     }

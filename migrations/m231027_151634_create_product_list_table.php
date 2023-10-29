@@ -19,7 +19,7 @@ class m231027_151634_create_product_list_table extends Migration
             'id' => $this->primaryKey(),
             'supplier_id' => $this->integer(),
             'date' => $this->integer(),
-            'status' => $this->smallInteger(2),
+            'status' => $this->smallInteger()->defaultValue(2),
             'created_at' => $this->integer(),
             'updated_at' => $this->integer(),
         ]);
