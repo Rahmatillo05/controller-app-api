@@ -32,7 +32,7 @@ class StorageRepository extends AbstractSqlArRepository implements iStorageRepos
         return StorageProduct::findAll(['product_list_id' => $product_list->id]);
     }
 
-    public function accept(object|array $data)
+    public function accept(object|array $data): array
     {
         $products = $data['products'];
         $transaction = \Yii::$app->db->beginTransaction();
@@ -61,5 +61,13 @@ class StorageRepository extends AbstractSqlArRepository implements iStorageRepos
             return ['message' => $e->getMessage(), 'code' => $e->getCode()];
         }
         return StorageProduct::findAll(['product_list_id' => $data['product_list_id']]);
+    }
+
+    public function getAmountOfWaitingProducts()
+    {
+        $sql = <<<SQL
+            SELECT sum(amount) FROM storage_product where status=2 group by product_id
+        SQL;
+        return \Yii::$app->db->createCommand($sql)->queryAll();
     }
 }

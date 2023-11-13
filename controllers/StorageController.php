@@ -50,7 +50,7 @@ class StorageController extends CommonController
     /**
      * @throws InvalidConfigException
      */
-    public function actionAccept(Request $request)
+    public function actionAccept(Request $request): array
     {
         $data = $request->getBodyParams();
         if (!isset($data['product_list_id'])) {
@@ -60,6 +60,11 @@ class StorageController extends CommonController
         return $this->storageRepository->accept($data);
     }
 
+    public function actionGetMin()
+    {
+        
+    }
+    
     /**
      * @throws InvalidConfigException
      */
