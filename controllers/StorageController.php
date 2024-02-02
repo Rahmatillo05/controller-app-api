@@ -50,12 +50,16 @@ class StorageController extends CommonController
     /**
      * @throws InvalidConfigException
      */
-    public function actionAccept(Request $request): array
+    public function actionAccept(Request $request)
     {
         $data = $request->getBodyParams();
         if (!isset($data['product_list_id'])) {
             Yii::$app->response->statusCode = 422;
             return ['message' => '"product_list_id" cannot be blank'];
+        }
+
+        if ($data['manual_accept']) {
+            return $this->storageRepository->manualAccept($data);
         }
         return $this->storageRepository->accept($data);
     }

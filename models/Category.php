@@ -12,9 +12,11 @@ use yii\db\ActiveQuery;
  * @property int $id
  * @property string $category_name
  * @property int|null $unit
+ * @property int|null $unit_id
  * @property int|null $created_at
  *
  * @property Product[] $products
+ * @property Unit $unitModel
  */
 class Category extends \yii\db\ActiveRecord
 {

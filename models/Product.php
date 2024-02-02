@@ -62,22 +62,14 @@ class Product extends BaseModel
         ];
     }
 
-    public function fields()
+    public function extraFields(): array
     {
         return [
-            'id',
-            'category_id' => function () {
-                return $this->category;
-            },
-            'product_name',
-            'all_amount' => function () {
-                return $this->productRemain();
-            },
-            'purchase_price',
-            'wholesale_price',
-            'retail_price',
-            'created_at' => function () {
-                return $this->updated_at;
+            'category',
+            'unit',
+            'storageProducts',
+            'productRemain' => function () {
+                return $this->getProductRemain();
             }
         ];
     }
@@ -125,7 +117,7 @@ class Product extends BaseModel
         return $product_amount->save();
     }
 
-    private function productRemain(): ?int
+    private function getProductRemain(): ?int
     {
         $productAmount = ProductAmount::findOne($this->id);
         return $productAmount->remaining_product;

@@ -20,6 +20,7 @@ use yii\db\ActiveQuery;
  */
 class ProductList extends BaseModel
 {
+
     /**
      * {@inheritdoc}
      */
@@ -34,6 +35,7 @@ class ProductList extends BaseModel
     public function rules(): array
     {
         return [
+            [['date'], 'required'],
             [['supplier_id', 'date', 'status', 'created_at', 'updated_at'], 'integer'],
             [['supplier_id'], 'exist', 'skipOnError' => true, 'targetClass' => Supplier::class, 'targetAttribute' => ['supplier_id' => 'id']],
         ];

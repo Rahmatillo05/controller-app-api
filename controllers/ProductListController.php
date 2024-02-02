@@ -28,7 +28,7 @@ class ProductListController extends CommonController
     public function actionCreate(Request $request)
     {
         $data = $request->getBodyParams();
-        if (!$data['date']){
+        if (!isset($data['date'])){
             $data['date'] = time();
         }
         return $this->commonRepository->create($data);

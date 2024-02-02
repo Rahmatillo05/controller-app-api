@@ -23,7 +23,7 @@ class Supplier extends BaseModel
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'supplier';
     }
@@ -31,7 +31,7 @@ class Supplier extends BaseModel
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['status', 'created_at', 'updated_at'], 'integer'],
@@ -42,7 +42,7 @@ class Supplier extends BaseModel
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
